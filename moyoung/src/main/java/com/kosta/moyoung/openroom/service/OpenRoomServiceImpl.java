@@ -38,9 +38,7 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		roomDto.setRoomUserCnt((long)1); 
 		
 		// 파일입력
-		if (file != null && !file.isEmpty()) {
-//			String path = servletContext.getRealPath("C:/resources/upload");
-//			System.out.println("path:"+path);
+		if (file != null && !file.isEmpty()) { 
 			String fileName = file.getOriginalFilename();
 			File dfile = new File(dir + fileName);
 			file.transferTo(dfile);
