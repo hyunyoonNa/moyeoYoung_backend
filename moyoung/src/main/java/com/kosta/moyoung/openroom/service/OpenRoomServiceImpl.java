@@ -4,10 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kosta.moyoung.openroom.dto.RoomDTO;
 import com.kosta.moyoung.openroom.entity.Room;
 import com.kosta.moyoung.openroom.repository.OpenRoomRepository;
+import com.kosta.moyoung.util.PageInfo;
 
 @Service
 public class OpenRoomServiceImpl implements OpenRoomService {
@@ -28,6 +33,13 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 	
 	private String dir = "C:/resources/upload/";
 
+	@Override
+	public void fileView(String imgName,OutputStream out) throws Exception { 
+		FileInputStream fis = new FileInputStream(dir + imgName);
+		FileCopyUtils.copy(fis, out);
+		out.flush();  
+	}
+	
 	@Override
 	public void makeRoom(RoomDTO roomDto, MultipartFile file) throws Exception {
 
@@ -53,25 +65,66 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 	}
 
 	@Override
-	public List<Room> findRoomList() throws Exception {
-		return orRepository.findAll();
+	public List<RoomDTO> findRoomList(Integer page, PageInfo pageInfo) throws Exception {
+		PageRequest pageRequest = PageRequest.of(page-1,8,Sort.by(Sort.Direction.DESC, "roomCreateDate"));
+		Page<Room> rooms = orRepository.findAll(pageRequest);
+		
+		pageInfo.setAllPage(rooms.getTotalPages());
+		pageInfo.setCurPage(page);
+		int startPage = (page-1)/8*8+1; 
+		int endPage = startPage+8-1;
+		if(endPage>pageInfo.getAllPage()) endPage=pageInfo.getAllPage();
+		pageInfo.setStartPage(startPage);
+		pageInfo.setEndPage(endPage);
+		
+		List<RoomDTO> list = new ArrayList<>();
+		
+		for(Room r : rooms.getContent()) {
+			list.add(modelMapper.map(r, RoomDTO.class));
+		}
+		return list; 
 	}
 
 	@Override
-	public List<Room> fineRoomByCategory(String cateName) throws Exception {
-		return orRepository.findAllByRoomCategory(cateName);
+	public List<RoomDTO> fineRoomByCategory(String cateName,Integer page, PageInfo pageInfo) throws Exception {
+		PageRequest pageRequest = PageRequest.of(page-1,8,Sort.by(Sort.Direction.DESC, "room_create_date"));
+		Page<Room> rooms = orRepository.findAllByRoomCategory(cateName, pageRequest);
+		pageInfo.setAllPage(rooms.getTotalPages());
+		pageInfo.setCurPage(page);
+		int startPage = (page-1)/8*8+1; 
+		int endPage = startPage+8-1;
+		if(endPage>pageInfo.getAllPage()) endPage=pageInfo.getAllPage();
+		pageInfo.setStartPage(startPage);
+		pageInfo.setEndPage(endPage);
+		
+		List<RoomDTO> list = new ArrayList<>();
+		
+		for(Room r : rooms.getContent()) {
+			list.add(modelMapper.map(r, RoomDTO.class));
+		}
+		return list; 
 	}
 
+	
 	@Override
-	public void fileView(String imgName,OutputStream out) throws Exception { 
-			FileInputStream fis = new FileInputStream(dir + imgName);
-			FileCopyUtils.copy(fis, out);
-			out.flush();  
-	}
-
-	@Override
-	public List<Room> fineRoomByWord(String word) throws Exception { 
-		return orRepository.findAllByRoomWord(word);
+	public List<RoomDTO> fineRoomByWord(String word, Integer page, PageInfo pageInfo) throws Exception { 
+//		return orRepository.findAllByRoomWord(word);
+		PageRequest pageRequest = PageRequest.of(page-1,8,Sort.by(Sort.Direction.DESC, "room_create_date"));
+		Page<Room> rooms = orRepository.findAllByRoomWord(word, pageRequest);
+		pageInfo.setAllPage(rooms.getTotalPages());
+		pageInfo.setCurPage(page);
+		int startPage = (page-1)/8*8+1; 
+		int endPage = startPage+8-1;
+		if(endPage>pageInfo.getAllPage()) endPage=pageInfo.getAllPage();
+		pageInfo.setStartPage(startPage);
+		pageInfo.setEndPage(endPage);
+		
+		List<RoomDTO> list = new ArrayList<>();
+		
+		for(Room r : rooms.getContent()) {
+			list.add(modelMapper.map(r, RoomDTO.class));
+		}
+		return list; 
 	}
 	
 
