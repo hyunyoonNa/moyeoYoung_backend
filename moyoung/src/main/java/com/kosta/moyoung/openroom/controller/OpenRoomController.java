@@ -1,7 +1,8 @@
 package com.kosta.moyoung.openroom.controller;
 
+import java.util.Optional;
+import javax.websocket.server.PathParam;
 import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,27 @@ public class OpenRoomController {
 	private OpenRoomService orService;
 
 	@PostMapping("/makeRoom")
+	public ResponseEntity<Long> makeRoom(@ModelAttribute RoomDTO roomDto, 
+			@RequestParam(value = "file", required=false) MultipartFile file){
+		try {
+			Long roomId = orService.makeRoom(roomDto,file);  
+			return new ResponseEntity<Long>(roomId,HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Long>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/getroomMain/{roomId}")
+	public ResponseEntity<Room> selectRoomById(@PathVariable Long roomId){
+		System.out.println(roomId);
+		try {
+			Room room = orService.selectById(roomId);
+			System.out.println(room);
+			return new ResponseEntity<Room>(room, HttpStatus.OK);
+		}catch(Exception e){
+			e.printStackTrace();
+			return new ResponseEntity<Room>(HttpStatus.BAD_REQUEST);
 	public ResponseEntity<String> makeRoom(@ModelAttribute RoomDTO roomDto,
 			@RequestParam(value = "file", required = false) MultipartFile file) {
 
