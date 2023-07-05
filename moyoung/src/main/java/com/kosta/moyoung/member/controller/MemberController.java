@@ -28,4 +28,6 @@ public class MemberController {
 	    public ResponseEntity<MemberResponseDto> findMemberInfoByEmail(@PathVariable String email) {
 	        return ResponseEntity.ok(memberService.findMemberInfoByEmail(email));
 	    }
+	    
+	    
 }
