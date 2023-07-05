@@ -54,6 +54,9 @@ dependencies {
 	
 	// https://mvnrepository.com/artifact/org.modelmapper/modelmapper
 	implementation 'org.modelmapper:modelmapper:2.4.4'
+	
+	//파일관련 추가
+	implementation 'commons-io:commons-io:2.6'
 }
 
 tasks.named('test') {
