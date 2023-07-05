@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kosta.moyoung.openroom.dto.RoomDTO;
+import com.kosta.moyoung.openroom.entity.Bookmark;
 import com.kosta.moyoung.openroom.service.OpenRoomService;
 import com.kosta.moyoung.util.PageInfo;
 
@@ -29,8 +30,7 @@ public class OpenRoomController {
 	@PostMapping("/makeRoom")
 	public ResponseEntity<String> makeRoom(@ModelAttribute RoomDTO roomDto,
 			@RequestParam(value = "file", required = false) MultipartFile file) {
-
-//		System.out.println(roomDto);
+ 
 		try {
 			orService.makeRoom(roomDto, file);
 			return new ResponseEntity<String>("모임방 개설 성공!", HttpStatus.OK);
@@ -42,21 +42,30 @@ public class OpenRoomController {
 	}
 
 	@GetMapping("/roomList/{page}")
-	public ResponseEntity<Map<String,Object>> roomList(@PathVariable Integer page) {
+	public ResponseEntity<Map<String, Object>> roomList(@PathVariable Integer page) {
 		try {
 			PageInfo pageInfo = new PageInfo();
 			List<RoomDTO> list = orService.findRoomList(page, pageInfo);
-			Map<String,Object> res = new HashMap<>();
+			Map<String, Object> res = new HashMap<>();
+			
 			res.put("pageInfo", pageInfo);
 			res.put("list", list);
-			return new ResponseEntity<Map<String,Object>>(res, HttpStatus.OK);
+			
+			
+			//로그인되어있는 상태 && 각각의 list 마다 user의 찜이 되어있는지 확인. > 
+			//유저 == 찜 있는 방의 id를 list로 내려줌?
+			//유저 == 찜 방을 list로 내려줌 .
+			Long userId = (long)101;
+			List<Long> isBookmaks = orService.isBookmarks(userId);
+			res.put("isBookmarks", isBookmaks);
+			return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
 		}
 	}
-	//모임방리스트
+	// 모임방리스트
 //	@GetMapping("/roomList")
 //	public ResponseEntity<List<Room>> roomList() {
 //		try {
@@ -69,33 +78,35 @@ public class OpenRoomController {
 //		}
 //	}
 
-	@GetMapping("/roomListByCate/{page}") 
-	public ResponseEntity<Map<String,Object>> roomListByCate(@RequestParam("cateName") String cateName, @PathVariable Integer page) {
-		try { 
+	@GetMapping("/roomListByCate/{page}")
+	public ResponseEntity<Map<String, Object>> roomListByCate(@RequestParam("cateName") String cateName,
+			@PathVariable Integer page) {
+		try {
 			PageInfo pageInfo = new PageInfo();
 			Map<String, Object> res = new HashMap<>();
 			List<RoomDTO> list = orService.fineRoomByCategory(cateName, page, pageInfo);
-			res.put("list",list);
+			res.put("list", list);
 			res.put("pageInfo", pageInfo);
-			return new ResponseEntity<Map<String,Object>>(res, HttpStatus.OK);
+			return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@GetMapping("/roomListByWord/{page}")
-	public ResponseEntity<Map<String,Object>> roomListByWord(@RequestParam("word") String word, @PathVariable Integer page) {
-		try { 
+	public ResponseEntity<Map<String, Object>> roomListByWord(@RequestParam("word") String word,
+			@PathVariable Integer page) {
+		try {
 			PageInfo pageInfo = new PageInfo();
 			Map<String, Object> res = new HashMap<>();
-			List<RoomDTO> list = orService.fineRoomByWord(word,page,pageInfo);
+			List<RoomDTO> list = orService.fineRoomByWord(word, page, pageInfo);
 			res.put("list", list);
-			res.put("pageInfo", pageInfo); 
-			return new ResponseEntity<Map<String,Object>>(res, HttpStatus.OK);
+			res.put("pageInfo", pageInfo);
+			return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -105,6 +116,21 @@ public class OpenRoomController {
 			orService.fileView(imgName, response.getOutputStream());
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	@GetMapping("/bookmark/{roomId}")
+	public ResponseEntity<Map<String,Object>> bookmark(@PathVariable("roomId") Long roomId) {
+		try {
+			//유저id 하드코딩 수정
+			Boolean isBookmark = orService.bookMark(roomId,(long)101); 
+			Map<String,Object> map = new HashMap<>();
+			map.put("isBookmark", isBookmark);
+			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
+//			 
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST);
 		}
 	}
 }
