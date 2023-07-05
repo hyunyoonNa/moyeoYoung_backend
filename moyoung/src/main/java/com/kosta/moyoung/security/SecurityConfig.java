@@ -60,7 +60,6 @@ public class SecurityConfig {
             .and()
             .oauth2Login()
             
-            // JwtFilter 를 addFilterBefore 로 등록했던 JwtSecurityConfig 클래스를 적용
             .and()
             .apply(new JwtSecurityConfig(jwtTokenProvider));
 

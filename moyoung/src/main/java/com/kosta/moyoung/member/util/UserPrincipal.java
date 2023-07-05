@@ -17,7 +17,9 @@ import lombok.Getter;
 
 @Data
 public class UserPrincipal implements OAuth2User, UserDetails {
-
+	
+	private Member member;
+	
 	private Long id;
 	private String email;
 	private String password;
@@ -34,7 +36,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 	public static UserPrincipal create(Member member) {
 		List<GrantedAuthority> authorities = Collections
 				.singletonList(new SimpleGrantedAuthority(member.getAuthority().getValue()));
-		return new UserPrincipal(member.getUserId(), member.getEmail(), member.getPassword(), authorities);
+		return new UserPrincipal(member.getMemeberId(), member.getEmail(), member.getPassword(), authorities);
 	}
 
 	public static UserPrincipal create(Member member, Map<String, Object> attributes) {
@@ -68,13 +70,13 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
-		return password;
+		return member.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return email;
+		return member.getEmail();
 	}
 
 	@Override
