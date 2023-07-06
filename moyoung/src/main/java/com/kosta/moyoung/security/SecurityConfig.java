@@ -51,6 +51,8 @@ public class SecurityConfig {
             .and()
             .authorizeRequests()
             .antMatchers("/auth/**").permitAll()
+            .antMatchers("/room/**").permitAll() 
+            .antMatchers("/feed/**").permitAll()
             .anyRequest().authenticated()   // 나머지 API 는 전부 인증 필요
             
             .and()
