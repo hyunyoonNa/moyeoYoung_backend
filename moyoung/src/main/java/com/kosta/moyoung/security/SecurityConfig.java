@@ -49,8 +49,10 @@ public class SecurityConfig {
 
             // 로그인, 회원가입 API 는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
             .and()
-            .authorizeRequests()
-            .antMatchers("/**/**").permitAll()
+            .authorizeRequests() 
+            .antMatchers("/auth/**").permitAll()
+            .antMatchers("/room/**").permitAll() 
+            .antMatchers("/feed/**").permitAll() 
             .anyRequest().authenticated()   // 나머지 API 는 전부 인증 필요
             
             .and()
@@ -60,7 +62,6 @@ public class SecurityConfig {
             .and()
             .oauth2Login()
             
-            // JwtFilter 를 addFilterBefore 로 등록했던 JwtSecurityConfig 클래스를 적용
             .and()
             .apply(new JwtSecurityConfig(jwtTokenProvider));
 

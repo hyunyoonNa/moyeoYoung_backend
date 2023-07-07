@@ -1,9 +1,10 @@
 package com.kosta.moyoung.openroom.controller;
-
+ 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
+import java.util.Map; 
+import java.util.Optional;
+import javax.websocket.server.PathParam;  
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PostMapping; 
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping; 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,27 +27,39 @@ import com.kosta.moyoung.openroom.entity.Room;
 import com.kosta.moyoung.openroom.service.OpenRoomService;
 import com.kosta.moyoung.security.jwt.JwtUtil;
 import com.kosta.moyoung.util.PageInfo;
-
+ 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j 
-@RestController 
+@RestController  
+@RequestMapping("room") 
 public class OpenRoomController {
 	@Autowired
 	private OpenRoomService orService;
 
-	@PostMapping("/makeRoom")
-	public ResponseEntity<String> makeRoom(@ModelAttribute RoomDTO roomDto,
-			@RequestParam(value = "file", required = false) MultipartFile file) {
-
+	@PostMapping("/makeRoom") 
+	public ResponseEntity<Long> makeRoom(@ModelAttribute RoomDTO roomDto, 
+			@RequestParam(value = "file", required=false) MultipartFile file){ 
 		try {
-			orService.makeRoom(roomDto, file);
-			return new ResponseEntity<String>("모임방 개설 성공!", HttpStatus.OK);
-
-		} catch (Exception e) {
+			Long roomId = orService.makeRoom(roomDto,file); 
+			return new ResponseEntity<Long>(roomId ,HttpStatus.OK);
+		}catch(Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<String>("모임방 개설 실패 ㅠ.ㅠ", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Long>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/getroomMain/{roomId}")
+	public ResponseEntity<Room> selectRoomById(@PathVariable Long roomId){
+		System.out.println(roomId);
+		try {
+			Room room = orService.selectById(roomId);
+			System.out.println(room);
+			return new ResponseEntity<Room>(room, HttpStatus.OK);
+		}catch(Exception e){
+			e.printStackTrace();
+			return new ResponseEntity<Room>(HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -56,11 +71,7 @@ public class OpenRoomController {
 			Map<String,Object> res = new HashMap<>();  
 			res.put("pageInfo", pageInfo);
 			res.put("list", list); 
-
-
-			//로그인되어있는 상태 && 각각의 list 마다 user의 찜이 되어있는지 확인. > 
-			//유저 == 찜 있는 방의 id를 list로 내려줌?
-			//유저 == 찜 방을 list로 내려줌 .
+      
 			Long memberId = Long.valueOf(1);;
 			List<Long> isBookmarks = orService.isBookmarks(memberId); 
 			if(!isBookmarks.isEmpty()) {
@@ -72,20 +83,8 @@ public class OpenRoomController {
 			e.printStackTrace();
 			return new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST); 
 		}
-	}
-	// 모임방리스트
-//	@GetMapping("/roomList")
-//	public ResponseEntity<List<Room>> roomList() {
-//		try {
-//			List<Room> list = orService.findRoomList();
-//			return new ResponseEntity<List<Room>>(list, HttpStatus.OK);
-//			
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return new ResponseEntity<List<Room>>(HttpStatus.BAD_REQUEST);
-//		}
-//	}
-
+	} 
+  
 	@GetMapping("/roomListByCate/{page}")
 	public ResponseEntity<Map<String, Object>> roomListByCate(@RequestParam("cateName") String cateName,
 			@PathVariable Integer page) {
@@ -134,8 +133,8 @@ public class OpenRoomController {
 			Boolean isBookmark = orService.bookMark(roomId,Long.valueOf(1)); 
 			Map<String,Object> map = new HashMap<>();
 			map.put("isBookmark", isBookmark);
-			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
-//			 
+			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK); 
+      
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST);

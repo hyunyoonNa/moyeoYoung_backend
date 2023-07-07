@@ -18,8 +18,9 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class UserPrincipal implements OAuth2User, UserDetails {
+public class UserPrincipal implements OAuth2User, UserDetails { 
 	private Member member;
+	 
 	private Long id;
 	private String email;
 	private String password;
@@ -35,8 +36,8 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
 	public static UserPrincipal create(Member member) {
 		List<GrantedAuthority> authorities = Collections
-				.singletonList(new SimpleGrantedAuthority(member.getAuthority().getValue()));
-		return new UserPrincipal(member.getMemberId(), member.getEmail(), member.getPassword(), authorities);
+				.singletonList(new SimpleGrantedAuthority(member.getAuthority().getValue())); 
+		return new UserPrincipal(member.getMemberId(), member.getEmail(), member.getPassword(), authorities); 
 	}
 
 	public static UserPrincipal create(Member member, Map<String, Object> attributes) {
@@ -70,12 +71,11 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
-		return password;
+		return member.getPassword();
 	}
 
 	@Override
-	public String getUsername() {
-		System.out.println(member.getEmail()); 
+	public String getUsername() {  
 		return member.getEmail();
 	}
 

@@ -29,8 +29,8 @@ import lombok.Setter;
 public class Member  {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long memberId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY) 
+	private Long memberId; 
 
 	@Column(nullable = false, length = 30, unique = true)
 	private String email;

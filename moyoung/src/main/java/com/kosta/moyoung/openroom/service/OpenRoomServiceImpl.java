@@ -3,11 +3,11 @@ package com.kosta.moyoung.openroom.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
-import java.sql.Date;
+import java.sql.Date; 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
+import java.util.Optional; 
+import javax.servlet.ServletContext;  
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,7 +44,7 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 	
 	
 
-	@Override
+	@Override 
 	public void fileView(String imgName,OutputStream out) throws Exception { 
 		FileInputStream fis = new FileInputStream(dir + imgName);
 		FileCopyUtils.copy(fis, out);
@@ -52,8 +52,7 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 	}
 	
 	@Override
-	public void makeRoom(RoomDTO roomDto, MultipartFile file) throws Exception {
-
+	public void makeRoom(RoomDTO roomDto, MultipartFile file) throws Exception { 
 		//1.개설일 설정
 		Date today = new Date(System.currentTimeMillis()); 
 		roomDto.setRoomCreateDate(today);
@@ -61,18 +60,25 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		roomDto.setMemberId(Long.valueOf(1));
 		//3. 멤버수 설정
 		roomDto.setRoomUserCnt((long)1); 
-		
 		// 파일입력
 		if (file != null && !file.isEmpty()) { 
 			String fileName = file.getOriginalFilename();
 			File dfile = new File(dir + fileName);
 			file.transferTo(dfile);
-
 		}  
 		// save
 		Room room = modelMapper.map(roomDto, Room.class); 
 		orRepository.save(room);  
+		return room.getRoomId();
+	}
 
+	@Override
+	public Room selectById(Long id) throws Exception {
+		Optional<Room> oroom = orRepository.findById(id);
+		if(oroom.isPresent()) {
+			return oroom.get();
+		}
+		return null;
 	}
 	 
 
@@ -119,8 +125,7 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 
 	
 	@Override
-	public List<RoomDTO> fineRoomByWord(String word, Integer page, PageInfo pageInfo) throws Exception { 
-//		return orRepository.findAllByRoomWord(word);
+	public List<RoomDTO> fineRoomByWord(String word, Integer page, PageInfo pageInfo) throws Exception {  
 		PageRequest pageRequest = PageRequest.of(page-1,8,Sort.by(Sort.Direction.DESC, "room_id"));
 		Page<Room> rooms = orRepository.findAllByRoomWord(word, pageRequest);
 		pageInfo.setAllPage(rooms.getTotalPages());
