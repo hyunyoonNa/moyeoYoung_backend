@@ -24,6 +24,6 @@ public class RoomDTO {
 	private String roomCategory; //카테고리
 	private Date roomCreateDate; //수정일
 	private String roomType; //모임유형 :open/close
-	private Long userId; //방장아이디
+	private Long memberId; //방장아이디
 	private Long roomUserCnt;  //멤버수 
 }

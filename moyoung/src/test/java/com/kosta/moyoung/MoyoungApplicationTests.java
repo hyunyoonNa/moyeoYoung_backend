@@ -4,14 +4,23 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.kosta.moyoung.openroom.entity.Room;
+import com.kosta.moyoung.member.repository.MemberRepository;
+import com.kosta.moyoung.openroom.repository.BookmarkRepository;
 import com.kosta.moyoung.openroom.repository.OpenRoomRepository;
+import com.kosta.moyoung.openroom.service.OpenRoomService;
 
 @SpringBootTest
 class MoyoungApplicationTests {
 
 	@Autowired
 	private OpenRoomRepository orRepository;
+	@Autowired
+	private OpenRoomService orService;
+	@Autowired
+	private MemberRepository memRepository; 
+	@Autowired
+	private BookmarkRepository bookmarkRepository;
+	
 	
 	@Test
 	void contextLoads() {
@@ -25,6 +34,15 @@ class MoyoungApplicationTests {
 //					.roomCategory("프로젝트").roomType("open").userId((long)1).build();
 //			orRepository.save(room);
 //			System.out.println(room);
+//		}catch(Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
+	
+//	@Test
+//	void bookmarkTest() {
+//		try {
+//			System.out.println(orService.isBookmarks((long)101));
 //		}catch(Exception e) {
 //			e.printStackTrace();
 //		}

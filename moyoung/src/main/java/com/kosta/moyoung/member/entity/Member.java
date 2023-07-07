@@ -1,6 +1,8 @@
 package com.kosta.moyoung.member.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +11,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
+
+import com.kosta.moyoung.openroom.entity.Bookmark;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,8 +29,8 @@ import lombok.Setter;
 public class Member  {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long memeberId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY) 
+	private Long memberId; 
 
 	@Column(nullable = false, length = 30, unique = true)
 	private String email;
@@ -57,6 +62,10 @@ public class Member  {
 	
 	@Enumerated(EnumType.STRING)
 	private Authority authority;
+	
+	
+	@OneToMany(mappedBy="memberBookmark")
+	private List<Bookmark> bookmarks = new ArrayList<>();
 	
 	 @Builder
 	 public Member(String email, String password, String nickname,  Provider provider, String profileContent, String imageUrl, Authority authority) {

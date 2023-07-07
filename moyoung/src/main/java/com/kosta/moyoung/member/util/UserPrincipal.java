@@ -14,12 +14,13 @@ import com.kosta.moyoung.member.entity.Member;
 
 import lombok.Data;
 import lombok.Getter;
+import lombok.ToString;
 
 @Data
-public class UserPrincipal implements OAuth2User, UserDetails {
-	
+@ToString
+public class UserPrincipal implements OAuth2User, UserDetails { 
 	private Member member;
-	
+	 
 	private Long id;
 	private String email;
 	private String password;
@@ -35,8 +36,8 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
 	public static UserPrincipal create(Member member) {
 		List<GrantedAuthority> authorities = Collections
-				.singletonList(new SimpleGrantedAuthority(member.getAuthority().getValue()));
-		return new UserPrincipal(member.getMemeberId(), member.getEmail(), member.getPassword(), authorities);
+				.singletonList(new SimpleGrantedAuthority(member.getAuthority().getValue())); 
+		return new UserPrincipal(member.getMemberId(), member.getEmail(), member.getPassword(), authorities); 
 	}
 
 	public static UserPrincipal create(Member member, Map<String, Object> attributes) {
@@ -64,7 +65,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return String.valueOf(id);
+		return String.valueOf(member.getMemberId());
 	}
 
 	@Override
@@ -74,8 +75,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 	}
 
 	@Override
-	public String getUsername() {
-		// TODO Auto-generated method stub
+	public String getUsername() {  
 		return member.getEmail();
 	}
 
