@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.kosta.moyoung.member.entity.Member;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,13 +26,13 @@ public class Bookmark {
 	private Long bookmarkId;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="userId")
+	@JoinColumn(name="memberId")
 	private Member memberBookmark;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="roomId")
 	private Room roomBookmark;
-	
+		
 	@Builder
 	public Bookmark(Member member, Room room) {
 		memberBookmark = member;

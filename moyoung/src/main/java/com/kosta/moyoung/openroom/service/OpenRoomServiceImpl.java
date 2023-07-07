@@ -18,12 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kosta.moyoung.member.entity.Member;
+import com.kosta.moyoung.member.repository.MemberRepository;
+import com.kosta.moyoung.member.util.UserPrincipal;
 import com.kosta.moyoung.openroom.dto.RoomDTO;
 import com.kosta.moyoung.openroom.entity.Bookmark;
-import com.kosta.moyoung.openroom.entity.Member;
 import com.kosta.moyoung.openroom.entity.Room;
 import com.kosta.moyoung.openroom.repository.BookmarkRepository;
-import com.kosta.moyoung.openroom.repository.MemberRepository;
 import com.kosta.moyoung.openroom.repository.OpenRoomRepository;
 import com.kosta.moyoung.util.PageInfo;
 
@@ -57,7 +58,7 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		Date today = new Date(System.currentTimeMillis()); 
 		roomDto.setRoomCreateDate(today);
 		//2. 유저id 설정
-		roomDto.setUserId((long)101);
+		roomDto.setMemberId(Long.valueOf(1));
 		//3. 멤버수 설정
 		roomDto.setRoomUserCnt((long)1); 
 		
@@ -73,6 +74,7 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		orRepository.save(room);  
 
 	}
+	 
 
 	@Override
 	public List<RoomDTO> findRoomList(Integer page, PageInfo pageInfo) throws Exception {
@@ -85,7 +87,7 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		int endPage = startPage+8-1;
 		if(endPage>pageInfo.getAllPage()) endPage=pageInfo.getAllPage();
 		pageInfo.setStartPage(startPage);
-		pageInfo.setEndPage(endPage);
+		pageInfo.setEndPage(endPage); 
 		
 		List<RoomDTO> list = new ArrayList<>();
 		
@@ -139,10 +141,9 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 	
 
 	@Override
-	public Boolean bookMark(Long roomId, Long userId) throws Exception { // TODO Auto-generated method stub
+	public Boolean bookMark(Long roomId, Long memberId) throws Exception {  
 		Optional<Room> oroom = orRepository.findById(roomId);
-		Optional<Member> omember = memberRepository.findById((long) 101);
-		
+		Optional<Member> omember = memberRepository.findById(memberId); 
 		//유저id,방id로 북마크 찾기
 		Bookmark bookmark = null;
 		if(omember.isPresent()) {
@@ -173,9 +174,9 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 
 	@Override
 	@Transactional
-	public List<Long> isBookmarks(Long userId) throws Exception {
+	public List<Long> isBookmarks(Long memberId) throws Exception {
 		List<Long> list = new ArrayList<>();
-		Optional<Member> omember = memberRepository.findById(userId);
+		Optional<Member> omember = memberRepository.findById(memberId);
 		if(omember.isPresent()) {
 			Member member = omember.get();
 			List<Bookmark> bookmarks = member.getBookmarks();
@@ -186,6 +187,8 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		System.out.println(list);
 		return list;
 	}
+
+	 
 	
 
 }

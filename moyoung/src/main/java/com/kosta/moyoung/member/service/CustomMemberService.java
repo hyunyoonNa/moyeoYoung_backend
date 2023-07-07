@@ -35,6 +35,6 @@ public class CustomMemberService implements UserDetailsService {
 	private UserDetails createUserDetails(Member member) {
 		GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getAuthority().toString());
 
-		return new User(String.valueOf(member.getUserId()), member.getPassword(), Collections.singleton(grantedAuthority));
+		return new User(String.valueOf(member.getMemberId()), member.getPassword(), Collections.singleton(grantedAuthority));
 	}
 }

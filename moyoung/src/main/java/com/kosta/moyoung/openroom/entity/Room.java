@@ -38,7 +38,7 @@ public class Room {
 	@Column(nullable = false)
 	private String roomType; //모임유형 : open/close비공개 
 	@Column(nullable = false) 
-	private Long userId; //방장아이디
+	private Long memberId; //방장아이디
 	@Column(nullable = false)
 	private Long roomUserCnt;  //멤버수
 	
@@ -47,7 +47,7 @@ public class Room {
 	
 	@Builder 
 	public Room(Long roomId, String roomTitle, String roomContent, String roomImage, String roomCategory,
-			Date roomCreateDate, String roomType, Long userId, Long roomUserCnt) {
+			Date roomCreateDate, String roomType, Long memberId, Long roomUserCnt) {
 		super();
 		this.roomId = roomId;
 		this.roomTitle = roomTitle;
@@ -56,7 +56,7 @@ public class Room {
 		this.roomCategory = roomCategory;
 		this.roomCreateDate = roomCreateDate;
 		this.roomType = roomType;
-		this.userId = userId;
+		this.memberId = memberId;
 		this.roomUserCnt = roomUserCnt;
 	}
 	
