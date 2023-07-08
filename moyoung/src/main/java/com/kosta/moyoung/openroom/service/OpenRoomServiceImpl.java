@@ -52,7 +52,7 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 	}
 	
 	@Override
-	public void makeRoom(RoomDTO roomDto, MultipartFile file) throws Exception { 
+	public Long makeRoom(RoomDTO roomDto, MultipartFile file) throws Exception { 
 		//1.개설일 설정
 		Date today = new Date(System.currentTimeMillis()); 
 		roomDto.setRoomCreateDate(today);
