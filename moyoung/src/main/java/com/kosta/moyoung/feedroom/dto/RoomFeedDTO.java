@@ -26,11 +26,11 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class RoomFeedDTO {
-	private Long feedId;
-	private Long userId;
-	private Long roomId;
-	private String title;
-	private String content;
-	private String filename;
-	private Date roomCreateDate;
+   private Long feedId;
+   private Long userId;
+   private Long roomId;
+   private String title;
+   private String content;
+   private String filename;
+   private Date roomCreateDate;
 }
