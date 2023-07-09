@@ -120,6 +120,7 @@ public class OpenRoomController {
 	@GetMapping("/view/{imgName}")
 	public void image(@PathVariable("imgName") String imgName, HttpServletResponse response) {
 		try {
+			System.out.println(imgName);
 			orService.fileView(imgName, response.getOutputStream());
 		} catch (Exception e) {
 			e.printStackTrace();

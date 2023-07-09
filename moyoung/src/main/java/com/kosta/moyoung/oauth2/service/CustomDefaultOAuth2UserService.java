@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class CustomDefaultOAuth2UserService extends DefaultOAuth2UserService {
 		
-	 private final MemberRepository memberRepository;
+	private final MemberRepository memberRepository;
 	
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
