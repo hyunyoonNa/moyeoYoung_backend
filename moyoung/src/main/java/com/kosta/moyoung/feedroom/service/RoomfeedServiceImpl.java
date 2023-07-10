@@ -34,16 +34,21 @@ public class RoomfeedServiceImpl implements RoomfeedService {
         roomfeedDto.setRoomCreateDate(today);
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //      String memberId = authentication.getName();
-      for (int i = 0; i < files.length; i++) {  
-         if (files[i] != null && !files[i] .isEmpty()) { 
-            String fileName = files[i].getOriginalFilename();
-            System.out.println(fileName);
-            File dfile = new File(dir + fileName);
-            files[i].transferTo(dfile);
-            
-         }  
-      }
+      String filenames = "";
+		if (files != null && files.length != 0) {
+			for (int i = 0; i < files.length; i++) {
+				if (files[i] != null && !files[i].isEmpty()) {
+					String fileName = files[i].getOriginalFilename();
+					System.out.println(fileName);
+					File dfile = new File(dir + fileName);
+					files[i].transferTo(dfile);
+//					filenames += files[i].getOriginalFilename()+",";
+				}
+			}
+		}
+		
       RoomfeedEntity roomfeed = modelMapper.map(roomfeedDto, RoomfeedEntity.class);
+//      roomfeed.setFilename(filenames);
       rfrepository.save(roomfeed);
    }
 
