@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,7 +22,6 @@ import lombok.ToString;
 @Getter
 @Setter 
 @NoArgsConstructor 
-@ToString
 public class Room {
 	@Id  @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long roomId; //방 아이디
@@ -42,8 +42,10 @@ public class Room {
 	@Column(nullable = false)
 	private Long roomUserCnt;  //멤버수
 	
-	@OneToMany(mappedBy="roomBookmark")
+	@OneToMany(mappedBy="roomBookmark" , fetch=FetchType.LAZY)
 	private List<Bookmark> bookmarks = new ArrayList<>();
+	
+	
 	
 	@Builder 
 	public Room(Long roomId, String roomTitle, String roomContent, String roomImage, String roomCategory,
@@ -59,8 +61,7 @@ public class Room {
 		this.memberId = memberId;
 		this.roomUserCnt = roomUserCnt;
 	}
-	
-
+	 
 	
 	
 }

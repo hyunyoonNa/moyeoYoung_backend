@@ -14,13 +14,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Getter
 @Setter 
 @NoArgsConstructor 
-@ToString
 public class Bookmark {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long bookmarkId;
@@ -37,5 +35,5 @@ public class Bookmark {
 	public Bookmark(Member member, Room room) {
 		memberBookmark = member;
 		roomBookmark = room;
-	}
+	} 
 }

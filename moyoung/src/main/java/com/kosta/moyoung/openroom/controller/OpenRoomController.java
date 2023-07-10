@@ -50,16 +50,17 @@ public class OpenRoomController {
 		}
 	}
 	
+	
+	
 	@GetMapping("/getroomMain/{roomId}")
-	public ResponseEntity<Room> selectRoomById(@PathVariable Long roomId){
-		System.out.println(roomId);
+	public ResponseEntity<RoomDTO> selectRoomById(@PathVariable Long roomId){
 		try {
-			Room room = orService.selectById(roomId);
-			System.out.println(room);
-			return new ResponseEntity<Room>(room, HttpStatus.OK);
+			log.info(roomId+"");
+			RoomDTO room = orService.selectById(roomId);
+			return new ResponseEntity<RoomDTO>(room, HttpStatus.OK);
 		}catch(Exception e){
 			e.printStackTrace();
-			return new ResponseEntity<Room>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<RoomDTO>(HttpStatus.BAD_REQUEST);
 		}
 	}
 
