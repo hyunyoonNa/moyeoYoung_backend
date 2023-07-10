@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kosta.moyoung.util.PageInfo;
@@ -15,6 +16,7 @@ import com.kosta.moyoung.youthspace.dto.YouthSpaceDTO;
 import com.kosta.moyoung.youthspace.service.YouthSpaceService;
 
 @RestController
+@RequestMapping("/youth")
 public class YouthSpaceController {
 	@Autowired
 	private YouthSpaceService ysService;
