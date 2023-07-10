@@ -52,10 +52,8 @@ public class OpenRoomController {
 	
 	@GetMapping("/getroomMain/{roomId}")
 	public ResponseEntity<Room> selectRoomById(@PathVariable Long roomId){
-		System.out.println(roomId);
 		try {
 			Room room = orService.selectById(roomId);
-			System.out.println(room);
 			return new ResponseEntity<Room>(room, HttpStatus.OK);
 		}catch(Exception e){
 			e.printStackTrace();

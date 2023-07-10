@@ -44,7 +44,7 @@ public class RoomfeedEntity{
    private String content;
    @Column
    private Date roomCreateDate;
-   @Column
+   @Column(nullable = true)
    private String filename;
    
    @Builder

@@ -34,16 +34,7 @@ public class RoomFeedController {
    @PostMapping("/writefeed/{roomId}")
    public ResponseEntity<String> writefeed(@PathVariable Long roomId, @ModelAttribute RoomFeedDTO roomfeedDto,
       @RequestParam(value = "files", required=false) MultipartFile[] files){
-   
-      String FileNames ="";
-      for (MultipartFile mf : files) {
-         String originFileName = mf.getOriginalFilename(); // 원본 파일 명
-         long fileSize = mf.getSize(); // 파일 사이즈
-         System.out.println("originFileName : " + originFileName);
-         System.out.println("fileSize : " + fileSize);
-         String safeFile =System.currentTimeMillis() + originFileName;
-         FileNames = FileNames+","+safeFile; 
-      }
+
       try {
          roomfeedservice.WriteFeed(roomfeedDto, files);
          return new ResponseEntity<String>("피드작성완료", HttpStatus.OK);
