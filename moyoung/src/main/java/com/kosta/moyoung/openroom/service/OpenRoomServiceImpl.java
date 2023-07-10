@@ -3,11 +3,11 @@ package com.kosta.moyoung.openroom.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
-import java.sql.Date; 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional; 
-import javax.servlet.ServletContext;  
+import java.util.Optional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kosta.moyoung.member.entity.Member;
 import com.kosta.moyoung.member.repository.MemberRepository;
-import com.kosta.moyoung.member.util.UserPrincipal;
 import com.kosta.moyoung.openroom.dto.RoomDTO;
 import com.kosta.moyoung.openroom.entity.Bookmark;
 import com.kosta.moyoung.openroom.entity.Room;
@@ -73,12 +72,13 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 	}
 
 	@Override
-	public Room selectById(Long id) throws Exception {
-		Optional<Room> oroom = orRepository.findById(id);
-		if(oroom.isPresent()) {
-			return oroom.get();
+	public RoomDTO selectById(Long id) throws Exception { 
+		Optional<Room> oroom = orRepository.findById(id); 
+		if(oroom.isEmpty()) {
+			return null;
 		}
-		return null;
+		
+		return modelMapper.map(oroom.get(), RoomDTO.class);
 	}
 	 
 
