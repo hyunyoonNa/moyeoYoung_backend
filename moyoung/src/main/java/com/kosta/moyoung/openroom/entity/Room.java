@@ -12,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.kosta.moyoung.feedroom.entity.RoomfeedEntity;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,7 +47,8 @@ public class Room {
 	@OneToMany(mappedBy="roomBookmark" , fetch=FetchType.LAZY)
 	private List<Bookmark> bookmarks = new ArrayList<>();
 	
-	
+	@OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
+	private List<RoomfeedEntity> roomfeeds = new ArrayList<>();
 	
 	@Builder 
 	public Room(Long roomId, String roomTitle, String roomContent, String roomImage, String roomCategory,

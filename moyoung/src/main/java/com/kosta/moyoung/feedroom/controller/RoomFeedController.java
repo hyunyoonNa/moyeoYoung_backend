@@ -3,6 +3,8 @@ package com.kosta.moyoung.feedroom.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,7 @@ public class RoomFeedController {
    @Autowired
    private RoomfeedService roomfeedservice;
    
+   @Autowired
    private MemberService memberService;
    
    //피드 작성
@@ -46,25 +49,36 @@ public class RoomFeedController {
    
    // 피드 조회
    @GetMapping("/selectfeed/{roomId}")
-   public ResponseEntity<List<RoomfeedEntity>> selectfeed(@PathVariable Long roomId){
+   public ResponseEntity<List<RoomFeedDTO>> selectfeed(@PathVariable Long roomId){
       try {
-         return new ResponseEntity<List<RoomfeedEntity>>(roomfeedservice.selectFeed(roomId), HttpStatus.OK);
+         return new ResponseEntity<List<RoomFeedDTO>>(roomfeedservice.selectFeed(roomId), HttpStatus.OK);
       } catch (Exception e) {
          e.printStackTrace();
-         return new ResponseEntity<List<RoomfeedEntity>>(HttpStatus.BAD_REQUEST);
+         return new ResponseEntity<List<RoomFeedDTO>>(HttpStatus.BAD_REQUEST);
       }
    }
    
    // 피드 상세 조회
    @GetMapping("/detailfeed/{feedId}")
-   public ResponseEntity<Optional<RoomfeedEntity>> detailfeed(@PathVariable Long feedId){
+   public ResponseEntity<RoomFeedDTO> detailfeed(@PathVariable Long feedId){
 	   try {
-		   return new ResponseEntity<Optional<RoomfeedEntity>>(roomfeedservice.detailFeed(feedId), HttpStatus.OK);
+		   
+		   return new ResponseEntity<RoomFeedDTO>(roomfeedservice.detailFeed(feedId), HttpStatus.OK);
 	   }catch (Exception e) {
 		   e.printStackTrace();
-		   return new ResponseEntity<Optional<RoomfeedEntity>>(HttpStatus.BAD_REQUEST);
+		   return new ResponseEntity<RoomFeedDTO>(HttpStatus.BAD_REQUEST);
 	   }
    }
+   
+   @GetMapping("/feedimg/{imgName}")
+	public void image(@PathVariable("imgName") String imgName, HttpServletResponse response) {
+		try {
+			System.out.println(imgName);
+			roomfeedservice.feedFileView(imgName, response.getOutputStream());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
    
    
 }
