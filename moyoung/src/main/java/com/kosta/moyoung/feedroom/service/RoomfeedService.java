@@ -14,4 +14,6 @@ public interface RoomfeedService {
    List<RoomFeedDTO> selectFeed(Long roomid) throws Exception;
    RoomFeedDTO detailFeed(Long feedId) throws Exception;
    void feedFileView(String imgName,OutputStream out) throws Exception; 
+   void deletefeed(Long feedId) throws Exception;
+   void modifyFeed(Long feedId, RoomFeedDTO roomfeedDto) throws Exception;
 }

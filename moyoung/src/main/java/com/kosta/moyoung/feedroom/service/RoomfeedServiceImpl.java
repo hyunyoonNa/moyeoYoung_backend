@@ -42,7 +42,7 @@ public class RoomfeedServiceImpl implements RoomfeedService {
    @Override
    public void WriteFeed(RoomFeedDTO roomfeedDto, MultipartFile[] files) throws Exception {
       Date today = new Date(System.currentTimeMillis());
-        roomfeedDto.setRoomCreateDate(today);
+      roomfeedDto.setRoomCreateDate(today);
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       String filenames = "";
 		if (files != null && files.length != 0) {
@@ -55,7 +55,6 @@ public class RoomfeedServiceImpl implements RoomfeedService {
 				}
 			}
 		}
-		
       RoomfeedEntity roomfeed = modelMapper.map(roomfeedDto, RoomfeedEntity.class);
       rfrepository.save(roomfeed);
    }
@@ -96,6 +95,22 @@ public class RoomfeedServiceImpl implements RoomfeedService {
 		FileInputStream fis = new FileInputStream(dir + imgName);
 		FileCopyUtils.copy(fis, out);
 		out.flush();  
+	}
+	
+	@Override
+	public void deletefeed(Long feedId) throws Exception {
+		rfrepository.deleteById(feedId);
+	}
+
+	@Override
+	public void modifyFeed(Long feedId, RoomFeedDTO roomfeedDto) throws Exception {
+		Optional<RoomfeedEntity> ofeed = rfrepository.findById(feedId);
+		RoomfeedEntity feed = ofeed.get();
+		
+		feed.setContent(roomfeedDto.getContent());
+		feed.setTitle(roomfeedDto.getTitle());
+		feed.setFilename(roomfeedDto.getFilename());
+		rfrepository.save(feed);
 	}
 }
 
