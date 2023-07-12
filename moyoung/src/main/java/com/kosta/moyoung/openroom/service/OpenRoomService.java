@@ -15,7 +15,6 @@ public interface OpenRoomService {
 	List<RoomDTO> fineRoomByCategory(String cateName,Integer page, PageInfo pageInfo) throws Exception;
 	List<RoomDTO> fineRoomByWord(String word,Integer page, PageInfo pageInfo) throws Exception;
 	RoomDTO selectById(Long id) throws Exception;
-	void fileView(String imgName,OutputStream out) throws Exception; 
 	Boolean bookMark(Long roomId, Long memberId)throws Exception;
 	List<Long> isBookmarks(Long memberId) throws Exception; 
 }	
