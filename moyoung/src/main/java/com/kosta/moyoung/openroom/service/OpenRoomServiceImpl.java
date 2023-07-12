@@ -1,6 +1,4 @@
-package com.kosta.moyoung.openroom.service;
-
-import java.io.File;
+package com.kosta.moyoung.openroom.service; 
 import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.sql.Date;
@@ -25,6 +23,7 @@ import com.kosta.moyoung.openroom.entity.Bookmark;
 import com.kosta.moyoung.openroom.entity.Room;
 import com.kosta.moyoung.openroom.repository.BookmarkRepository;
 import com.kosta.moyoung.openroom.repository.OpenRoomRepository;
+import com.kosta.moyoung.util.FileService;
 import com.kosta.moyoung.util.PageInfo;
 
 @Service
@@ -39,17 +38,10 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 	
 	@Autowired
 	private BookmarkRepository bookmarkRepository;
-	private String dir = "C:/resources/upload/";
-	
+	@Autowired
+	private FileService fileService; 
 	
 
-	@Override 
-	public void fileView(String imgName,OutputStream out) throws Exception { 
-		FileInputStream fis = new FileInputStream(dir + imgName);
-		FileCopyUtils.copy(fis, out);
-		out.flush();  
-	}
-	
 	@Override
 	public Long makeRoom(RoomDTO roomDto, MultipartFile file) throws Exception { 
 		//1.개설일 설정
@@ -60,16 +52,15 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		//3. 멤버수 설정
 		roomDto.setRoomUserCnt((long)1); 
 		// 파일입력
-		if (file != null && !file.isEmpty()) { 
-			String fileName = file.getOriginalFilename();
-			File dfile = new File(dir + fileName);
-			file.transferTo(dfile);
-		}  
+		fileService.fileUpload(file);
 		// save
 		Room room = modelMapper.map(roomDto, Room.class); 
 		orRepository.save(room);  
 		return room.getRoomId();
 	}
+	
+	
+	
 
 	@Override
 	public RoomDTO selectById(Long id) throws Exception { 
