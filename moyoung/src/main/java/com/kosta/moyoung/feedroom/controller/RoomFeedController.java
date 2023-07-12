@@ -37,7 +37,6 @@ public class RoomFeedController {
    @PostMapping("/writefeed/{roomId}")
    public ResponseEntity<String> writefeed(@PathVariable Long roomId, @ModelAttribute RoomFeedDTO roomfeedDto,
       @RequestParam(value = "files", required=false) MultipartFile[] files){
-
       try {
          roomfeedservice.WriteFeed(roomfeedDto, files);
          return new ResponseEntity<String>("피드작성완료", HttpStatus.OK);
@@ -62,7 +61,6 @@ public class RoomFeedController {
    @GetMapping("/detailfeed/{feedId}")
    public ResponseEntity<RoomFeedDTO> detailfeed(@PathVariable Long feedId){
 	   try {
-		   
 		   return new ResponseEntity<RoomFeedDTO>(roomfeedservice.detailFeed(feedId), HttpStatus.OK);
 	   }catch (Exception e) {
 		   e.printStackTrace();
@@ -70,10 +68,32 @@ public class RoomFeedController {
 	   }
    }
    
+   // 피드 수정
+   @PostMapping("/modifyfeed/{feedId}")
+   public ResponseEntity<String> modifyfeed(@PathVariable Long feedId, @ModelAttribute RoomFeedDTO roomfeedDto) {
+		try {
+			roomfeedservice.modifyFeed(feedId, roomfeedDto);
+			return new ResponseEntity<String>("수정완료", HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+   }
+   
+   // 피드 삭제 
+   @PostMapping("/deletefeed/{feedId}")
+   public void deletefeed(@PathVariable Long feedId) {
+		try {
+			roomfeedservice.deletefeed(feedId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+   }
+
+   
    @GetMapping("/feedimg/{imgName}")
 	public void image(@PathVariable("imgName") String imgName, HttpServletResponse response) {
 		try {
-			System.out.println(imgName);
 			roomfeedservice.feedFileView(imgName, response.getOutputStream());
 		} catch (Exception e) {
 			e.printStackTrace();
