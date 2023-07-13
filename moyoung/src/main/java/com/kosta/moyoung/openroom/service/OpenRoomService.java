@@ -11,7 +11,7 @@ import com.kosta.moyoung.util.PageInfo;
 
 public interface OpenRoomService { 
 	Long makeRoom(RoomDTO roomDto,MultipartFile file)throws Exception;
-	List<RoomDTO> findRoomList(Integer page, PageInfo pageInfo) throws Exception;
+	List<RoomDTO> findRoomList(Integer page, PageInfo pageInfo, Integer cnt) throws Exception;
 	List<RoomDTO> fineRoomByCategory(String cateName,Integer page, PageInfo pageInfo) throws Exception;
 	List<RoomDTO> fineRoomByWord(String word,Integer page, PageInfo pageInfo) throws Exception;
 	RoomDTO selectById(Long id) throws Exception;

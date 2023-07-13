@@ -61,10 +61,10 @@ public class OpenRoomController {
 	}
 
 	@GetMapping("/roomList/{page}")
-	public ResponseEntity<Map<String, Object>> roomList(@PathVariable Integer page) {
+	public ResponseEntity<Map<String, Object>> roomList(@PathVariable Integer page, @RequestParam(value = "cnt", required=false) Integer cnt) {
 		try {
 			PageInfo pageInfo = new PageInfo();
-			List<RoomDTO> list = orService.findRoomList(page, pageInfo);
+			List<RoomDTO> list = orService.findRoomList(page, pageInfo, cnt);
 			Map<String,Object> res = new HashMap<>();  
 			res.put("pageInfo", pageInfo);
 			res.put("list", list); 

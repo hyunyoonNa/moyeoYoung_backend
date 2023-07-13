@@ -74,8 +74,14 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 	 
 
 	@Override
-	public List<RoomDTO> findRoomList(Integer page, PageInfo pageInfo) throws Exception {
-		PageRequest pageRequest = PageRequest.of(page - 1, 8, Sort.by(Sort.Direction.DESC, "roomId"));
+	public List<RoomDTO> findRoomList(Integer page, PageInfo pageInfo, Integer cnt) throws Exception {
+		
+		Integer reqCnt = 8;
+		
+		if(cnt!=null && cnt>=1) {
+			reqCnt = cnt;
+		}
+		PageRequest pageRequest = PageRequest.of(page - 1, reqCnt, Sort.by(Sort.Direction.DESC, "roomId")); 			
 		Page<Room> rooms = orRepository.findAll(pageRequest);
 		
 		pageInfo.setAllPage(rooms.getTotalPages());
