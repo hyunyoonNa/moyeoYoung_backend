@@ -24,11 +24,11 @@ public class YouthSpaceController {
 	private YouthSpaceService ysService;
 	
 	@GetMapping("/allYouthSpaceList/{page}")
-	public ResponseEntity<Map<String,Object>> getAllYouthSpaceList(@PathVariable("page") Integer page){
+	public ResponseEntity<Map<String,Object>> getAllYouthSpaceList(@PathVariable("page") Integer page, @RequestParam("cnt") Integer cnt){
 		try { 
 			PageInfo pageInfo = new PageInfo();
 			Map<String, Object> res = new HashMap<>();
-			res.put("list", ysService.getAllYouthSpaceList(page, pageInfo));
+			res.put("list", ysService.getAllYouthSpaceList(page, pageInfo, cnt));
 			res.put("pageInfo", pageInfo);
 			return new ResponseEntity<Map<String,Object>>(res,HttpStatus.OK); 
 		}catch(Exception e) {
