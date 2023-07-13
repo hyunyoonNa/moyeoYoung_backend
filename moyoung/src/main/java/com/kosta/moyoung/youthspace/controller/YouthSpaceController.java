@@ -24,7 +24,7 @@ public class YouthSpaceController {
 	private YouthSpaceService ysService;
 	
 	@GetMapping("/allYouthSpaceList/{page}")
-	public ResponseEntity<Map<String,Object>> getAllYouthSpaceList(@PathVariable("page") Integer page, @RequestParam("cnt") Integer cnt){
+	public ResponseEntity<Map<String,Object>> getAllYouthSpaceList(@PathVariable("page") Integer page, @RequestParam(value="cnt", required=false) Integer cnt){
 		try { 
 			PageInfo pageInfo = new PageInfo();
 			Map<String, Object> res = new HashMap<>();
