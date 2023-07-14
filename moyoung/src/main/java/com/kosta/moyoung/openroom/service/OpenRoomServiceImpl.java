@@ -1,6 +1,4 @@
 package com.kosta.moyoung.openroom.service; 
-import java.io.FileInputStream;
-import java.io.OutputStream;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,16 +11,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kosta.moyoung.member.dto.MemberResponseDto;
 import com.kosta.moyoung.member.entity.Member;
 import com.kosta.moyoung.member.repository.MemberRepository;
+import com.kosta.moyoung.member.service.MemberService;
 import com.kosta.moyoung.openroom.dto.RoomDTO;
 import com.kosta.moyoung.openroom.entity.Bookmark;
 import com.kosta.moyoung.openroom.entity.Room;
 import com.kosta.moyoung.openroom.repository.BookmarkRepository;
 import com.kosta.moyoung.openroom.repository.OpenRoomRepository;
+import com.kosta.moyoung.security.jwt.JwtUtil;
 import com.kosta.moyoung.util.FileService;
 import com.kosta.moyoung.util.PageInfo;
 
@@ -41,6 +41,9 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 	@Autowired
 	private FileService fileService; 
 	
+	@Autowired
+	private MemberService memberService;
+	
 
 	@Override
 	public Long makeRoom(RoomDTO roomDto, MultipartFile file) throws Exception { 
@@ -48,7 +51,8 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		Date today = new Date(System.currentTimeMillis()); 
 		roomDto.setRoomCreateDate(today);
 		//2. 유저id 설정
-		roomDto.setMemberId(Long.valueOf(1));
+		MemberResponseDto mem = memberService.findMemberInfoById(JwtUtil.getCurrentMemberId());
+		roomDto.setMemberId(mem.getMemberId());
 		//3. 멤버수 설정
 		roomDto.setRoomUserCnt((long)1); 
 		// 파일입력
