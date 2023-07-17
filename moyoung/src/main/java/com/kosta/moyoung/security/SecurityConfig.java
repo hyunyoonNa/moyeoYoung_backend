@@ -54,12 +54,12 @@ public class SecurityConfig {
 
             // 로그인, 회원가입 API 는 토큰이 없는 상태에서 요청이 들어오기 때문에 permitAll 설정
             .and()
+            .authorizeRequests()
             .antMatchers("/**/**").permitAll()
+            .antMatchers("/","/css/**","/images/**","/js/**","/favicon.ico").permitAll()
             .antMatchers("/room/**").permitAll() 
             .antMatchers("/feed/**").permitAll() 
             
-            .authorizeRequests()
-            .antMatchers("/","/css/**","/images/**","/js/**","/favicon.ico").permitAll()
             .antMatchers("/auth/**").permitAll()
             .antMatchers("/member/**").permitAll()
             .antMatchers("/login/oauth2/*").permitAll()

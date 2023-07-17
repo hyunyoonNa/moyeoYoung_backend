@@ -18,6 +18,10 @@ import com.kosta.moyoung.security.jwt.JwtUtil;
 @SpringBootTest
 class MoyoungApplicationTests {
 	
+	
+	@Autowired
+	private MemberRepository memberRepository;
+	
 	@Autowired
 	private OpenRoomRepository orRepository;
 	@Autowired

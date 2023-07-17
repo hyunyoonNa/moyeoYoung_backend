@@ -75,40 +75,40 @@ public class Member  {
 	private List<Bookmark> bookmarks = new ArrayList<>();
 	
 	 @Builder
-	 public Member(String email, String password, String nickname,  Provider provider, String profileContent, String imageUrl, Authority authority) {
+	 public Member(String email, String password, String nickname,  Provider provider, String profileContent, String fileName, Authority authority) {
 	        this.email = email;
 	        this.password = password;
 	        this.nickname=nickname;
 	        this.provider=provider;
 	        this.profileContent = profileContent;
-	        this.imageUrl=imageUrl;
+	        this.fileName=fileName;
 	        this.authority = authority;
 	    }
 	 
 	 @Builder
-	 public Member(String nickname, String email, String imageUrl, Authority authority ) {
+	 public Member(String nickname, String email, String fileName, Authority authority ) {
 	        this.nickname=nickname;
 	        this.email = email;
-	        this.imageUrl=imageUrl;
+	        this.fileName=fileName;
 	        this.authority = authority;
 	 }
 //	 @Builder
-//	 public Member(String email, String password, String nickname,  Provider provider, String profileContent, String imageUrl, Authority authority) {
+//	 public Member(String email, String password, String nickname,  Provider provider, String profileContent, String fileName, Authority authority) {
 //	        this.email = email;
 //	        this.password = password;
 //	        this.nickname=nickname;
 //	        this.provider=provider;
 //	        
 //	        this.profileContent = profileContent;
-//	        this.imageUrl=imageUrl;
+//	        this.fileName=fileName;
 //	        this.authority = authority;
 //	    }
 //	 
 //	 @Builder
-//	 public Member(String nickname, String email, String imageUrl, Authority authority ) {
+//	 public Member(String nickname, String email, String fileName, Authority authority ) {
 //	        this.nickname=nickname;
 //	        this.email = email;
-//	        this.imageUrl=imageUrl;
+//	        this.fileName=fileName;
 //	        this.authority = authority;
 //	 }
 	 
