@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.kosta.moyoung.member.entity.Member;
+import com.kosta.moyoung.member.entity.Provider;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long>{
@@ -15,4 +16,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>{
 	Optional<Member> findById(long memberId);
 	boolean existsByEmail(String email);
 	boolean existsByNickname(String nickname);
+	
+	//소셜타입과 소셜의 식별값으로 회원찾는 메소드
+	Optional<Member> findByProviderAndSocialId(Provider provider, String socialId);
 }

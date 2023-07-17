@@ -1,32 +1,28 @@
 package com.kosta.moyoung;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.kosta.moyoung.member.entity.Member;
+import com.kosta.moyoung.member.repository.MemberRepository;
 import com.kosta.moyoung.openroom.entity.Room;
 import com.kosta.moyoung.openroom.repository.OpenRoomRepository;
+import com.kosta.moyoung.security.jwt.JwtUtil;
 
 @SpringBootTest
 class MoyoungApplicationTests {
-
+	
 	@Autowired
-	private OpenRoomRepository orRepository;
+	private MemberRepository memberRepository;
 	
 	@Test
-	void contextLoads() {
+	public void test() {
+		Long memberId = JwtUtil.getCurrentMemberId();
+		Optional<Member> member = memberRepository.findById(memberId);
+		System.out.println(member);
 	}
-	
-	// 방개설 save 테스트
-//	@Test 
-//	void makeRoom() {
-//		try {
-//			Room room =  Room.builder().roomId((long)1001).roomTitle("룰루랄라c방").roomContent("내가 왕이다!")
-//					.roomCategory("프로젝트").roomType("open").userId((long)1).build();
-//			orRepository.save(room);
-//			System.out.println(room);
-//		}catch(Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
+
 }

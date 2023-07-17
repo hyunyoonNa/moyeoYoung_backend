@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,7 @@ import com.kosta.moyoung.openroom.entity.Room;
 import com.kosta.moyoung.openroom.service.OpenRoomService;
 
 @RestController
+@RequestMapping("room")
 public class OpenRoomController {
 	@Autowired
 	private OpenRoomService orService;
@@ -48,17 +50,6 @@ public class OpenRoomController {
 		}catch(Exception e){
 			e.printStackTrace();
 			return new ResponseEntity<Room>(HttpStatus.BAD_REQUEST);
-	public ResponseEntity<String> makeRoom(@ModelAttribute RoomDTO roomDto,
-			@RequestParam(value = "file", required = false) MultipartFile file) {
-
-//		System.out.println(roomDto);
-		try {
-			orService.makeRoom(roomDto, file);
-			return new ResponseEntity<String>("모임방 개설 성공!", HttpStatus.OK);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<String>("모임방 개설 실패 ㅠ.ㅠ", HttpStatus.BAD_REQUEST);
 		}
 	}
 

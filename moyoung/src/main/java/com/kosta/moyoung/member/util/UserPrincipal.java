@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import com.kosta.moyoung.member.dto.MemberResponseDto;
 import com.kosta.moyoung.member.entity.Member;
 
 import lombok.Data;
@@ -33,12 +34,14 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 		this.authorities = authorities;
 	}
 
+	// OAuth2User 를 사용한 SNS 유저 로그인 시 사용하는 생성자
+		
 	public static UserPrincipal create(Member member) {
 		List<GrantedAuthority> authorities = Collections
 				.singletonList(new SimpleGrantedAuthority(member.getAuthority().getValue()));
-		return new UserPrincipal(member.getMemeberId(), member.getEmail(), member.getPassword(), authorities);
+		return new UserPrincipal(member.getMemberId(), member.getEmail(), member.getPassword(), authorities);
 	}
-
+	
 	public static UserPrincipal create(Member member, Map<String, Object> attributes) {
 		UserPrincipal userPrincipal = UserPrincipal.create(member, attributes);
 		userPrincipal.setAttributes(attributes);
@@ -70,13 +73,13 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
-		return member.getPassword();
+		return password;
 	}
 
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return member.getEmail();
+		return email;
 	}
 
 	@Override

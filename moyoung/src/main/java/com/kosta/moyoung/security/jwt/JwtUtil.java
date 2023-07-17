@@ -17,7 +17,10 @@ public class JwtUtil {
         if (authentication == null || authentication.getName() == null) {
             throw  new RuntimeException("Security Context 에 인증 정보가 없습니다.");
         }
-
+        String memberId = authentication.getName();
+        if (memberId.equals("anonymousUser")) {
+            return null;
+        }
         return Long.parseLong(authentication.getName());
     }
 }

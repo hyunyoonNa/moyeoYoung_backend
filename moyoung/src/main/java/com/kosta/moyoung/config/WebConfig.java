@@ -12,9 +12,11 @@ public class WebConfig implements WebMvcConfigurer{
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
 			.allowedOrigins("http://localhost:3000")
-			.allowedMethods("GET","POST","PUT","DELETE");
-	}
-	
+			.allowedMethods("GET","POST","PUT","DELETE")
+			.allowedHeaders("*")    //허용되는 헤더
+	        .allowCredentials(true)    //자격증명 허용
+	        .maxAge(3600);   //허용 시간
+	}	
 	@Bean
 	public ModelMapper modelMapper() {
 		return new ModelMapper();

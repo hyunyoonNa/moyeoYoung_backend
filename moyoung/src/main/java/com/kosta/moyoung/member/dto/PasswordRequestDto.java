@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 public class PasswordRequestDto {
 	
 	  private String email;
-	  private String exPassword;
 	  private String newPassword;
 }

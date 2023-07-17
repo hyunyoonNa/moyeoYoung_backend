@@ -1,7 +1,5 @@
 package com.kosta.moyoung.member.dto;
 
-import java.time.LocalDate;
-
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -12,7 +10,9 @@ import com.kosta.moyoung.member.entity.Provider;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,6 +23,7 @@ public class MemberRequestDto {
     private String nickname;
 	private String profileContent;
 	private Provider provider;
+	private String fileName;	
 	
 	
     public Member toMember(PasswordEncoder passwordEncoder) {
@@ -33,6 +34,7 @@ public class MemberRequestDto {
 				.profileContent(profileContent)
                 .authority(Authority.ROLE_USER)
                 .provider(provider)
+                .fileName(fileName)
                 .build();
     }
     

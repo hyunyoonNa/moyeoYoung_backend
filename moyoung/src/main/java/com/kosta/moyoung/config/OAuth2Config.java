@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 
 import lombok.Data;
 
-@Configuration
-@ConfigurationProperties(prefix = "spring.security.oauth2.client.registration.kakao")
+//@Configuration
+//@ConfigurationProperties(prefix = "spring.security.oauth2.client.registration.kakao")
 public class OAuth2Config {
     private final Auth auth = new Auth();
     private final OAuth2 oauth2 = new OAuth2();
