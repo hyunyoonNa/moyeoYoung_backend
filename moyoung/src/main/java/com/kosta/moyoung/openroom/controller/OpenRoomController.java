@@ -74,12 +74,12 @@ public class OpenRoomController {
 			Map<String,Object> res = new HashMap<>();  
 			res.put("pageInfo", pageInfo);
 			res.put("list", list); 
-      
 			MemberResponseDto mem =  memberService.findMemberInfoById(JwtUtil.getCurrentMemberId());
 			List<Long> isBookmarks = orService.isBookmarks(mem.getMemberId()); 
 			if(!isBookmarks.isEmpty()) {
 				res.put("isBookmarks", isBookmarks); 				
 			}
+
 			return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
 
 		} catch (Exception e) {
@@ -158,15 +158,15 @@ public class OpenRoomController {
 	}
 	 
 
-//	@GetMapping("/test")
-//	public ResponseEntity<Map<String,Object>> bookmark() {
-//		Map<String,Object> map = new HashMap<>(); 
-//		try {   
-//		    map.put("test",JwtUtil.getCurrentMemberId());
-//			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST);
-//		}
-//	}
+	@GetMapping("/test")
+	public ResponseEntity<Map<String,Object>> bookmark() {
+		Map<String,Object> map = new HashMap<>(); 
+		try {   
+		    map.put("test",JwtUtil.getCurrentMemberId());
+			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST);
+		}
+	}
 }

@@ -17,6 +17,8 @@ import javax.persistence.PrePersist;
 
 import com.kosta.moyoung.openroom.entity.Bookmark;
 
+//import com.kosta.moyoung.openroom.entity.Bookmark;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
