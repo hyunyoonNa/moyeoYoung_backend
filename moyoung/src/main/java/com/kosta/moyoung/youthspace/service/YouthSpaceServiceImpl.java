@@ -27,9 +27,13 @@ public class YouthSpaceServiceImpl implements YouthSpaceService {
 	private ModelMapper modelMapper;
 
 	@Override
-	public List<YouthSpaceDTO> getAllYouthSpaceList(Integer page, PageInfo pageInfo) throws Exception {
+	public List<YouthSpaceDTO> getAllYouthSpaceList(Integer page, PageInfo pageInfo, Integer cnt) throws Exception {
 
-		PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "spaceId"));
+		int reqCnt = 10;
+		if(cnt!=null && cnt>=1) {
+			reqCnt = cnt;
+		}
+		PageRequest pageRequest = PageRequest.of(page - 1, reqCnt, Sort.by(Sort.Direction.DESC, "spaceId"));
 		Page<YouthSpace> ysList = ysRepository.findAll(pageRequest);
 
 		pageInfo.setAllPage(ysList.getTotalPages());

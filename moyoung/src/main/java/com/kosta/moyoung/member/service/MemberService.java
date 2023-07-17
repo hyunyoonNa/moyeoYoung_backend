@@ -1,30 +1,27 @@
 package com.kosta.moyoung.member.service;
 
-import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.kosta.moyoung.member.dto.MemberRequestDto;
 import com.kosta.moyoung.member.dto.MemberResponseDto;
-import com.kosta.moyoung.member.repository.MemberRepository;
+import com.kosta.moyoung.member.dto.PasswordRequestDto;
 
-import lombok.RequiredArgsConstructor;
+public interface MemberService {
 
-@Service
-@RequiredArgsConstructor
-public class MemberService {
+	// 회원아이디로조회
+	MemberResponseDto findMemberInfoById(Long memberId) throws Exception;
+
+	// 회원 이메일로 조회
+	MemberResponseDto findMemberInfoByEmail(String email) throws Exception;
 	
-	private final MemberRepository memberRepository;
+	// 회원 수정
+	void updateMember(Long memberId, MemberRequestDto memberRequestDto, MultipartFile fileName) throws Exception;
 	
-	 public MemberResponseDto findMemberInfoById(Long memberId) {
-	        return memberRepository.findById(memberId)
-	                .map(MemberResponseDto::of)
-	                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
-	    }
-
-	    public MemberResponseDto findMemberInfoByEmail(String email) {
-	        return memberRepository.findByEmail(email)
-	                .map(MemberResponseDto::of)
-	                .orElseThrow(() -> new RuntimeException("유저 정보가 없습니다."));
-	    }
-	    
-	    
+	//비밀번호 재설정
+	void updatePassword(String email, PasswordRequestDto passwordRequestDto) throws Exception;
+	
+	// 회원 탈퇴
+	void delete(Long memberId) throws Exception;
+	
 	
 }

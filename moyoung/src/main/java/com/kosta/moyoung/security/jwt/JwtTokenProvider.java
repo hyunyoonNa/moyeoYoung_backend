@@ -39,7 +39,7 @@ public class JwtTokenProvider {
 //    private String secretKey;
     private final Key key;
     private static final long ACCESS_TOKEN_EXPIRE_TIME =  60 * 30 * 1000L;  // 토큰 유효시간 : 30분
-	private static final long REFRESH_TOKEN_EXPIRE_TIME = 60 * 60 * 24 * 7*1000L ;
+	private static final long REFRESH_TOKEN_EXPIRE_TIME = 60 * 60 * 24 *1000L ;
 	
 	private static final String AUTHORITIES_KEY = "auth";	
     private static final String BEARER_TYPE = "Bearer";
@@ -59,12 +59,12 @@ public class JwtTokenProvider {
 	        log.info("INIT : JWT SecretKey 초기화 완료");
 	    }
 
-//	public long getMemberId(String token) {
-//		log.info("[getUserName] 토큰에서 회원 ID 추출 ");
-//		long memberId = Long.parseLong(Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject());
-//		log.info("[getUserName] 토큰에서 회원 ID 추출 완료 iD : {}" ,memberId);
-//		return memberId;
-//	}
+	public long getMemberId(String token) {
+		log.info("[getUserName] 토큰에서 회원 ID 추출 ");
+		long memberId = Long.parseLong(Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject());
+		log.info("[getUserName] 토큰에서 회원 ID 추출 완료 iD : {}" ,memberId);
+		return memberId;
+	}
 	
 	
 
@@ -108,6 +108,17 @@ public class JwtTokenProvider {
                 .build();
     }
 	
+		private Claims parseClaims(String accessToken) {
+	        try {
+	            return Jwts.parserBuilder()
+	            			.setSigningKey(key)
+	            			.build()
+	            			.parseClaimsJws(accessToken)
+	            			.getBody();
+	        } catch (ExpiredJwtException e) {
+	            return e.getClaims();
+	        }
+	    }
 	
 	// 토큰으로부터 유저정보를 가져온다.
 	   public Authentication getAuthentication(String accessToken) {
@@ -157,24 +168,7 @@ public class JwtTokenProvider {
 		return false;
 	}
 	
-	private Claims parseClaims(String accessToken) {
-        try {
-            return Jwts.parserBuilder()
-            			.setSigningKey(key)
-            			.build()
-            			.parseClaimsJws(accessToken)
-            			.getBody();
-        } catch (ExpiredJwtException e) {
-            return e.getClaims();
-        }
-    }
 
-	public Long getMemberId(String accessToken) {
-        log.info("[getMemberId] 토큰에서 회원 ID 추출 시작");
-        Claims claims = parseClaims(accessToken);
-        Long memberId = Long.parseLong(claims.getSubject());
-        log.info("[getMemberId] 토큰에서 회원 ID 추출 완료. ID: {}", memberId);
-        return memberId;
-    }
+
 	
 }

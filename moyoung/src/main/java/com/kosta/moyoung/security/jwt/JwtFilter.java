@@ -32,7 +32,7 @@ public class JwtFilter extends OncePerRequestFilter {
 		String jwt = resolveToken(request);
 
 		log.info("[This is Verifying token!!]"); // 그냥 스트링 출력해주는 로그
-        log.info(((HttpServletRequest) request).getRequestURL().toString());	
+        log.info("여기 사람 있어요?? ", ((HttpServletRequest) request).getRequestURL().toString());	
 		// 2. validateToken 으로 토큰 유효성 검사
 		// 정상 토큰이면 해당 토큰으로 Authentication 을 가져와서 SecurityContext 에 저장
 		if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
@@ -47,6 +47,7 @@ public class JwtFilter extends OncePerRequestFilter {
 	private String resolveToken(HttpServletRequest request) {
 		String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
 		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+			log.info("곰토큰: " , request);
 			return bearerToken.substring(7);
 		} 	
 		return null;

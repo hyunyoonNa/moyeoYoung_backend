@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kosta.moyoung.member.dto.MemberResponseDto;
+import com.kosta.moyoung.member.service.MemberService;
 import com.kosta.moyoung.openroom.dto.RoomDTO;
 import com.kosta.moyoung.openroom.service.OpenRoomService;
 import com.kosta.moyoung.security.jwt.JwtUtil;
@@ -32,6 +35,8 @@ import lombok.extern.slf4j.Slf4j;
 public class OpenRoomController {
 	@Autowired
 	private OpenRoomService orService;
+	@Autowired
+	private MemberService memberService;
 	@Autowired
 	private FileService fileService;
 
@@ -62,19 +67,19 @@ public class OpenRoomController {
 	}
 
 	@GetMapping("/roomList/{page}")
-	public ResponseEntity<Map<String, Object>> roomList(@PathVariable Integer page) {
+	public ResponseEntity<Map<String, Object>> roomList(@PathVariable Integer page, @RequestParam(value = "cnt", required=false) Integer cnt) {
 		try {
 			PageInfo pageInfo = new PageInfo();
-			List<RoomDTO> list = orService.findRoomList(page, pageInfo);
+			List<RoomDTO> list = orService.findRoomList(page, pageInfo, cnt);
 			Map<String,Object> res = new HashMap<>();  
 			res.put("pageInfo", pageInfo);
 			res.put("list", list); 
-      
-//			Long memberId = Long.valueOf(1);;
-//			List<Long> isBookmarks = orService.isBookmarks(memberId); 
-//			if(!isBookmarks.isEmpty()) {
-//				res.put("isBookmarks", isBookmarks); 				
-//			}
+			MemberResponseDto mem =  memberService.findMemberInfoById(JwtUtil.getCurrentMemberId());
+			List<Long> isBookmarks = orService.isBookmarks(mem.getMemberId()); 
+			if(!isBookmarks.isEmpty()) {
+				res.put("isBookmarks", isBookmarks); 				
+			}
+
 			return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
 
 		} catch (Exception e) {
@@ -92,6 +97,12 @@ public class OpenRoomController {
 			List<RoomDTO> list = orService.fineRoomByCategory(cateName, page, pageInfo);
 			res.put("list", list);
 			res.put("pageInfo", pageInfo);
+			
+			MemberResponseDto mem =  memberService.findMemberInfoById(JwtUtil.getCurrentMemberId());
+			List<Long> isBookmarks = orService.isBookmarks(mem.getMemberId()); 
+			if(!isBookmarks.isEmpty()) {
+				res.put("isBookmarks", isBookmarks); 				
+			}
 			return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -108,6 +119,12 @@ public class OpenRoomController {
 			List<RoomDTO> list = orService.fineRoomByWord(word, page, pageInfo);
 			res.put("list", list);
 			res.put("pageInfo", pageInfo);
+			
+			MemberResponseDto mem =  memberService.findMemberInfoById(JwtUtil.getCurrentMemberId());
+			List<Long> isBookmarks = orService.isBookmarks(mem.getMemberId()); 
+			if(!isBookmarks.isEmpty()) {
+				res.put("isBookmarks", isBookmarks); 				
+			}
 			return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -128,7 +145,8 @@ public class OpenRoomController {
 	public ResponseEntity<Map<String,Object>> bookmark(@PathVariable("roomId") Long roomId) {
 		try {
 			//유저id
-			Boolean isBookmark = orService.bookMark(roomId,Long.valueOf(1)); 
+			MemberResponseDto mem = memberService.findMemberInfoById(JwtUtil.getCurrentMemberId());
+			Boolean isBookmark = orService.bookMark(roomId,mem.getMemberId()); 
 			Map<String,Object> map = new HashMap<>();
 			map.put("isBookmark", isBookmark);
 			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK); 

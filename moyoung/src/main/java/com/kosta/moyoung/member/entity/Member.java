@@ -21,12 +21,14 @@ import com.kosta.moyoung.openroom.entity.Bookmark;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Member  {
@@ -53,8 +55,12 @@ public class Member  {
 	@Enumerated(EnumType.STRING)
     private Provider provider;
 	
-	private String imageUrl;
-	  
+	@Setter
+	@Column(nullable= true)
+	private String fileName;
+	
+	private String socialId;
+	
 	@Column
 	private LocalDate regdate;
 	
@@ -71,30 +77,55 @@ public class Member  {
 	private List<Bookmark> bookmarks = new ArrayList<>();
 	
 	 @Builder
-	 public Member(String email, String password, String nickname,  Provider provider, String profileContent, String imageUrl, Authority authority) {
+	 public Member(String email, String password, String nickname,  Provider provider, String profileContent, String fileName, Authority authority) {
 	        this.email = email;
 	        this.password = password;
 	        this.nickname=nickname;
 	        this.provider=provider;
 	        this.profileContent = profileContent;
-	        this.imageUrl=imageUrl;
+	        this.fileName=fileName;
 	        this.authority = authority;
 	    }
 	 
 	 @Builder
-	 public Member(String nickname, String email, String imageUrl, Authority authority ) {
+	 public Member(String nickname, String email, String fileName, Authority authority ) {
 	        this.nickname=nickname;
 	        this.email = email;
-	        this.imageUrl=imageUrl;
+	        this.fileName=fileName;
 	        this.authority = authority;
 	 }
+//	 @Builder
+//	 public Member(String email, String password, String nickname,  Provider provider, String profileContent, String fileName, Authority authority) {
+//	        this.email = email;
+//	        this.password = password;
+//	        this.nickname=nickname;
+//	        this.provider=provider;
+//	        
+//	        this.profileContent = profileContent;
+//	        this.fileName=fileName;
+//	        this.authority = authority;
+//	    }
+//	 
+//	 @Builder
+//	 public Member(String nickname, String email, String fileName, Authority authority ) {
+//	        this.nickname=nickname;
+//	        this.email = email;
+//	        this.fileName=fileName;
+//	        this.authority = authority;
+//	 }
 	 
 	 public void updateNickname(String nickname){
 	        this.nickname = nickname;
 	    }
 	 
-	 public void updateImageUrl(String imageUrl){
-	        this.imageUrl = imageUrl;
+	 public void updateImageUrl(String fileName){
+	        this.fileName = fileName;
 	    }
+	 
+	 public void updateProfileContent(String profileContent){
+	        this.profileContent = profileContent;
+	    }
+	 
+	 
 	
 }
