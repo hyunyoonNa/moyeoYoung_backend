@@ -6,13 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.kosta.moyoung.member.entity.Member;
+import com.kosta.moyoung.member.repository.MemberRepository;
 import com.kosta.moyoung.openroom.repository.BookmarkRepository;
 import com.kosta.moyoung.openroom.repository.OpenRoomRepository;
 import com.kosta.moyoung.openroom.service.OpenRoomService;
-import com.kosta.moyoung.member.entity.Member;
-import com.kosta.moyoung.member.repository.MemberRepository;
-import com.kosta.moyoung.openroom.entity.Room;
-import com.kosta.moyoung.openroom.repository.OpenRoomRepository;
 import com.kosta.moyoung.security.jwt.JwtUtil;
 
 @SpringBootTest
