@@ -1,6 +1,4 @@
 package com.kosta.moyoung.openroom.service; 
-import java.io.FileInputStream;
-import java.io.OutputStream;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,15 +11,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kosta.moyoung.member.entity.Member;
 import com.kosta.moyoung.member.repository.MemberRepository;
 import com.kosta.moyoung.openroom.dto.RoomDTO;
 import com.kosta.moyoung.openroom.entity.Bookmark;
+//import com.kosta.moyoung.openroom.entity.Bookmark;
 import com.kosta.moyoung.openroom.entity.Room;
 import com.kosta.moyoung.openroom.repository.BookmarkRepository;
+//import com.kosta.moyoung.openroom.repository.BookmarkRepository;
 import com.kosta.moyoung.openroom.repository.OpenRoomRepository;
 import com.kosta.moyoung.util.FileService;
 import com.kosta.moyoung.util.PageInfo;
@@ -35,7 +34,6 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 	private MemberRepository memberRepository; 
 	@Autowired
 	private OpenRoomRepository orRepository;
-	
 	@Autowired
 	private BookmarkRepository bookmarkRepository;
 	@Autowired
@@ -59,9 +57,6 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		return room.getRoomId();
 	}
 	
-	
-	
-
 	@Override
 	public RoomDTO selectById(Long id) throws Exception { 
 		Optional<Room> oroom = orRepository.findById(id); 

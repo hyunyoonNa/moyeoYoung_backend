@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kosta.moyoung.openroom.dto.RoomDTO;
 import com.kosta.moyoung.openroom.service.OpenRoomService;
+import com.kosta.moyoung.security.jwt.JwtUtil;
 import com.kosta.moyoung.util.FileService;
 import com.kosta.moyoung.util.PageInfo;
 
@@ -69,11 +70,11 @@ public class OpenRoomController {
 			res.put("pageInfo", pageInfo);
 			res.put("list", list); 
       
-			Long memberId = Long.valueOf(1);;
-			List<Long> isBookmarks = orService.isBookmarks(memberId); 
-			if(!isBookmarks.isEmpty()) {
-				res.put("isBookmarks", isBookmarks); 				
-			}
+//			Long memberId = Long.valueOf(1);;
+//			List<Long> isBookmarks = orService.isBookmarks(memberId); 
+//			if(!isBookmarks.isEmpty()) {
+//				res.put("isBookmarks", isBookmarks); 				
+//			}
 			return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
 
 		} catch (Exception e) {
@@ -139,15 +140,15 @@ public class OpenRoomController {
 	}
 	 
 
-//	@GetMapping("/test")
-//	public ResponseEntity<Map<String,Object>> bookmark() {
-//		Map<String,Object> map = new HashMap<>(); 
-//		try {   
-//		    map.put("test",JwtUtil.getCurrentMemberId());
-//			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST);
-//		}
-//	}
+	@GetMapping("/test")
+	public ResponseEntity<Map<String,Object>> bookmark() {
+		Map<String,Object> map = new HashMap<>(); 
+		try {   
+		    map.put("test",JwtUtil.getCurrentMemberId());
+			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST);
+		}
+	}
 }

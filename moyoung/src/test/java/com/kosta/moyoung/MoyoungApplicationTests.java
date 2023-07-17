@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.kosta.moyoung.member.repository.MemberRepository;
-import com.kosta.moyoung.openroom.repository.BookmarkRepository;
+//import com.kosta.moyoung.openroom.repository.BookmarkRepository;
 import com.kosta.moyoung.openroom.repository.OpenRoomRepository;
 import com.kosta.moyoung.openroom.service.OpenRoomService;
 
@@ -19,7 +19,7 @@ class MoyoungApplicationTests {
 	@Autowired
 	private MemberRepository memRepository; 
 	@Autowired
-	private BookmarkRepository bookmarkRepository;
+//	private BookmarkRepository bookmarkRepository;
 	
 	
 	@Test
