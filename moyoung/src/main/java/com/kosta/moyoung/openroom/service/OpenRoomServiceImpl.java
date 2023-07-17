@@ -19,8 +19,10 @@ import com.kosta.moyoung.member.repository.MemberRepository;
 import com.kosta.moyoung.member.service.MemberService;
 import com.kosta.moyoung.openroom.dto.RoomDTO;
 import com.kosta.moyoung.openroom.entity.Bookmark;
+//import com.kosta.moyoung.openroom.entity.Bookmark;
 import com.kosta.moyoung.openroom.entity.Room;
 import com.kosta.moyoung.openroom.repository.BookmarkRepository;
+//import com.kosta.moyoung.openroom.repository.BookmarkRepository;
 import com.kosta.moyoung.openroom.repository.OpenRoomRepository;
 import com.kosta.moyoung.security.jwt.JwtUtil;
 import com.kosta.moyoung.util.FileService;
@@ -35,7 +37,6 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 	private MemberRepository memberRepository; 
 	@Autowired
 	private OpenRoomRepository orRepository;
-	
 	@Autowired
 	private BookmarkRepository bookmarkRepository;
 	@Autowired
@@ -63,9 +64,6 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		return room.getRoomId();
 	}
 	
-	
-	
-
 	@Override
 	public RoomDTO selectById(Long id) throws Exception { 
 		Optional<Room> oroom = orRepository.findById(id); 

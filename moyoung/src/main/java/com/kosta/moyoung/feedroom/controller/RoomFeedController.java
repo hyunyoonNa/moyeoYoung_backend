@@ -71,6 +71,7 @@ public class RoomFeedController {
    // 피드 수정
    @PostMapping("/modifyfeed/{feedId}")
    public ResponseEntity<String> modifyfeed(@PathVariable Long feedId, @ModelAttribute RoomFeedDTO roomfeedDto) {
+	   System.out.println(roomfeedDto.getContent());
 		try {
 			roomfeedservice.modifyFeed(feedId, roomfeedDto);
 			return new ResponseEntity<String>("수정완료", HttpStatus.OK);
@@ -89,7 +90,8 @@ public class RoomFeedController {
 			e.printStackTrace();
 		}
    }
-
+   
+   
    
    @GetMapping("/feedimg/{imgName}")
 	public void image(@PathVariable("imgName") String imgName, HttpServletResponse response) {
