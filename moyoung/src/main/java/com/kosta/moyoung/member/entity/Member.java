@@ -16,12 +16,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 
 import com.kosta.moyoung.openroom.entity.Bookmark;
+import com.kosta.moyoung.openroom.entity.Room;
 
 //import com.kosta.moyoung.openroom.entity.Bookmark;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -58,7 +58,7 @@ public class Member  {
 	@Setter
 	@Column(nullable= true)
 	private String fileName;
-	
+	@Column
 	private String socialId;
 	
 	@Column
@@ -72,6 +72,8 @@ public class Member  {
 	@Enumerated(EnumType.STRING)
 	private Authority authority;
 	
+	@OneToMany(mappedBy="member", fetch=FetchType.EAGER)
+	private List<Room> rooms = new ArrayList<>();
 	
 	@OneToMany(mappedBy="memberBookmark", fetch=FetchType.LAZY)
 	private List<Bookmark> bookmarks = new ArrayList<>();
