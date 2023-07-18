@@ -52,7 +52,7 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		Date today = new Date(System.currentTimeMillis()); 
 		roomDto.setRoomCreateDate(today);
 		//2. 유저id 설정
-		MemberResponseDto mem = memberService.findMemberInfoById(JwtUtil.getCurrentMemberId());
+		MemberResponseDto mem = memberService.findMemberInfoById(JwtUtil.getCurrentMemberId()); 
 		roomDto.setMemberId(mem.getMemberId());
 		//3. 멤버수 설정
 		roomDto.setRoomUserCnt((long)1); 
@@ -71,7 +71,7 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 			return null;
 		}
 		
-		return modelMapper.map(oroom.get(), RoomDTO.class);
+		return new RoomDTO(oroom.get());
 	}
 	 
 
@@ -97,7 +97,7 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		List<RoomDTO> list = new ArrayList<>();
 		
 		for(Room r : rooms.getContent()) {
-			list.add(modelMapper.map(r, RoomDTO.class));
+			list.add(new RoomDTO(r));
 		}
 		return list; 
 	}
@@ -117,7 +117,7 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		List<RoomDTO> list = new ArrayList<>();
 		
 		for(Room r : rooms.getContent()) {
-			list.add(modelMapper.map(r, RoomDTO.class));
+			list.add(new RoomDTO(r));
 		}
 		return list; 
 	}
@@ -138,7 +138,7 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		List<RoomDTO> list = new ArrayList<>();
 		
 		for(Room r : rooms.getContent()) {
-			list.add(modelMapper.map(r, RoomDTO.class));
+			list.add(new RoomDTO(r));
 		}
 		return list; 
 	}
