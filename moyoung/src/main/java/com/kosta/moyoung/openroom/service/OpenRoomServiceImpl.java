@@ -52,8 +52,8 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		Date today = new Date(System.currentTimeMillis()); 
 		roomDto.setRoomCreateDate(today);
 		//2. 유저id 설정
-		MemberResponseDto mem = memberService.findMemberInfoById(JwtUtil.getCurrentMemberId());
-		roomDto.setMemberId(mem.getMemberId());
+		Long memberId = JwtUtil.getCurrentMemberId();
+		roomDto.setMemberId(memberId);
 		//3. 멤버수 설정
 		roomDto.setRoomUserCnt((long)1); 
 		// 파일입력
@@ -70,11 +70,9 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		if(oroom.isEmpty()) {
 			return null;
 		}
-		
 		return modelMapper.map(oroom.get(), RoomDTO.class);
 	}
 	 
-
 	@Override
 	public List<RoomDTO> findRoomList(Integer page, PageInfo pageInfo, Integer cnt) throws Exception {
 		
@@ -188,7 +186,6 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 				list.add(b.getRoomBookmark().getRoomId());
 			}
 		}
-		System.out.println(list);
 		return list;
 	}
 
