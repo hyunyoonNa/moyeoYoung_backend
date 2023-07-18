@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 
+import com.kosta.moyoung.feedroom.entity.LikeEntity;
 import com.kosta.moyoung.openroom.entity.Bookmark;
 import com.kosta.moyoung.openroom.entity.Room;
 
@@ -26,6 +27,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Setter
 @Getter
 @Entity
 @Builder
@@ -77,6 +79,9 @@ public class Member  {
 	
 	@OneToMany(mappedBy="memberBookmark", fetch=FetchType.LAZY)
 	private List<Bookmark> bookmarks = new ArrayList<>();
+	
+	@OneToMany(mappedBy="feed", fetch=FetchType.LAZY)
+	private List<LikeEntity> Like = new ArrayList<>();
 	
 	 @Builder
 	 public Member(String email, String password, String nickname,  Provider provider, String profileContent, String fileName, Authority authority) {
