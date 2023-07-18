@@ -156,16 +156,5 @@ public class OpenRoomController {
 		}
 	}
 	 
-
-	@GetMapping("/test")
-	public ResponseEntity<Map<String,Object>> bookmark() {
-		Map<String,Object> map = new HashMap<>(); 
-		try {   
-		    map.put("test",JwtUtil.getCurrentMemberId());
-			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST);
-		}
-	}
+ 
 }
