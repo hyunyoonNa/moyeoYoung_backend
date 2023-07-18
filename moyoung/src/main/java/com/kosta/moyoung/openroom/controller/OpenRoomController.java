@@ -68,16 +68,15 @@ public class OpenRoomController {
 
 	@GetMapping("/roomList/{page}")
 	public ResponseEntity<Map<String, Object>> roomList(@PathVariable Integer page, @RequestParam(value = "cnt", required=false) Integer cnt) {
+		Map<String,Object> res = new HashMap<>();  
 		try {
 			PageInfo pageInfo = new PageInfo();
 			List<RoomDTO> list = orService.findRoomList(page, pageInfo, cnt);
-			Map<String,Object> res = new HashMap<>();  
 			res.put("pageInfo", pageInfo);
-			res.put("list", list); 
-			MemberResponseDto mem =  memberService.findMemberInfoById(JwtUtil.getCurrentMemberId());
-			List<Long> isBookmarks = orService.isBookmarks(mem.getMemberId()); 
+			res.put("list", list);     
+			List<Long> isBookmarks = orService.isBookmarks(JwtUtil.getCurrentMemberId()); 
 			if(!isBookmarks.isEmpty()) {
-				res.put("isBookmarks", isBookmarks); 				
+				res.put("isBookmarks", isBookmarks); 			 
 			}
 
 			return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
