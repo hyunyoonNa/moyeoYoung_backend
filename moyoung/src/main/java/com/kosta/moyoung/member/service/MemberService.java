@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kosta.moyoung.member.dto.MemberRequestDto;
 import com.kosta.moyoung.member.dto.MemberResponseDto;
 import com.kosta.moyoung.member.dto.PasswordRequestDto;
+import com.kosta.moyoung.member.entity.Member;
 
 public interface MemberService {
 
@@ -22,6 +23,8 @@ public interface MemberService {
 	
 	// 회원 탈퇴
 	void delete(Long memberId) throws Exception;
+	
+	Member findMember(Long memberId)throws Exception;
 	
 	
 }

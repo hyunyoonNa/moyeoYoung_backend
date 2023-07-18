@@ -16,12 +16,12 @@ import javax.persistence.OneToMany;
 
 import com.kosta.moyoung.feedroom.entity.RoomfeedEntity;
 import com.kosta.moyoung.member.entity.Member;
+import com.kosta.moyoung.openroom.dto.RoomDTO;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Getter
@@ -70,8 +70,18 @@ public class Room {
 		this.roomType = roomType; 
 		this.roomUserCnt = roomUserCnt;
 	}
-	 
-	
+	 //방만들때
+	public Room(RoomDTO roomDto, Member member) {
+		this.roomId = roomDto.getRoomId();
+		this.roomTitle = roomDto.getRoomTitle();
+		this.roomContent = roomDto.getRoomContent();
+		this.roomImage = roomDto.getRoomImage(); 
+		this.roomCategory = roomDto.getRoomCategory();
+		this.roomCreateDate = roomDto.getRoomCreateDate();
+		this.roomType = roomDto.getRoomType();
+		this.member = member;
+		this.roomUserCnt = roomDto.getRoomUserCnt();
+	}
 	
 }
 
