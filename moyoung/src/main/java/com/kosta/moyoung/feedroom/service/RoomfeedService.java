@@ -16,4 +16,7 @@ public interface RoomfeedService {
    void feedFileView(String imgName,OutputStream out) throws Exception; 
    void deletefeed(Long feedId) throws Exception;
    void modifyFeed(Long feedId, RoomFeedDTO roomfeedDto) throws Exception;
+   void increaseLike(Long feedId, Long memberId) throws Exception;
+   void decreaseLike(Long feedId, Long memberId) throws Exception;
+   List<Long> isLike(Long memberId) throws Exception;
 }

@@ -1,7 +1,8 @@
 package com.kosta.moyoung.feedroom.controller;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kosta.moyoung.feedroom.dto.CommentDTO;
 import com.kosta.moyoung.feedroom.dto.RoomFeedDTO;
-import com.kosta.moyoung.feedroom.entity.RoomfeedEntity;
+import com.kosta.moyoung.feedroom.entity.LikeEntity;
+import com.kosta.moyoung.feedroom.service.CommentService;
 import com.kosta.moyoung.feedroom.service.RoomfeedService;
 import com.kosta.moyoung.member.service.MemberService;
 import com.kosta.moyoung.security.jwt.JwtUtil;
@@ -32,6 +35,9 @@ public class RoomFeedController {
    
    @Autowired
    private MemberService memberService;
+   
+   @Autowired
+   private CommentService commentService;
    
    //피드 작성
    @PostMapping("/writefeed/{roomId}")
@@ -63,7 +69,6 @@ public class RoomFeedController {
 	   try {
 		   return new ResponseEntity<RoomFeedDTO>(roomfeedservice.detailFeed(feedId), HttpStatus.OK);
 	   }catch (Exception e) {
-		   e.printStackTrace();
 		   return new ResponseEntity<RoomFeedDTO>(HttpStatus.BAD_REQUEST);
 	   }
    }
@@ -71,6 +76,7 @@ public class RoomFeedController {
    // 피드 수정
    @PostMapping("/modifyfeed/{feedId}")
    public ResponseEntity<String> modifyfeed(@PathVariable Long feedId, @ModelAttribute RoomFeedDTO roomfeedDto) {
+	   System.out.println(roomfeedDto.getContent());
 		try {
 			roomfeedservice.modifyFeed(feedId, roomfeedDto);
 			return new ResponseEntity<String>("수정완료", HttpStatus.OK);
@@ -89,8 +95,58 @@ public class RoomFeedController {
 			e.printStackTrace();
 		}
    }
-
    
+   //피드 좋아요
+   @GetMapping("/like/{feedId}")
+   public ResponseEntity<String> likefeed(@PathVariable("feedId") Long feedId){
+	   try {
+		   Long memberId = JwtUtil.getCurrentMemberId();
+		   System.out.println(memberId);
+		   roomfeedservice.increaseLike(feedId, memberId);
+		   return new ResponseEntity<String>("좋아요", HttpStatus.OK);
+	} catch (Exception e) {
+		e.printStackTrace();
+		return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+	}
+   }
+ //피드 좋아요취소
+   @GetMapping("delike/{feedId}")
+   public ResponseEntity<String> Delikefeed(@PathVariable("feedId") Long feedId){
+	   try {
+		   Long memberId = JwtUtil.getCurrentMemberId();
+		   roomfeedservice.decreaseLike(feedId, memberId);
+		   return new ResponseEntity<String>("좋아요취소", HttpStatus.OK);
+		} catch (Exception e) {
+		   return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+   }
+   //좋아요 리스트
+   @GetMapping("likelist")
+   public ResponseEntity<List<Long>> Likelist(){
+	   try {
+		   Long memberId = JwtUtil.getCurrentMemberId();
+		   System.out.println(memberId);
+		   return new ResponseEntity<List<Long>>(roomfeedservice.isLike(memberId), HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<List<Long>>(HttpStatus.BAD_REQUEST);
+		}
+   }
+   
+   //댓글 작성
+   @PostMapping("writecomment/{feedId}")
+   public ResponseEntity<String> writecomment(@PathVariable("feedId") Long feedId, @ModelAttribute CommentDTO commentDto){
+	   try {
+		   commentService.Writefeed(commentDto,feedId);
+		   return new ResponseEntity<String>("댓글 작성 완료", HttpStatus.OK);
+	   }catch (Exception e) {
+		   e.printStackTrace();
+		   return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+	   }
+   }
+   
+   
+ 
    @GetMapping("/feedimg/{imgName}")
 	public void image(@PathVariable("imgName") String imgName, HttpServletResponse response) {
 		try {

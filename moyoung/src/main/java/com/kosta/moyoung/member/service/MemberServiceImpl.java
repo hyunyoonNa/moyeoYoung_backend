@@ -74,4 +74,11 @@ public class MemberServiceImpl implements MemberService {
 		memberRepository.save(member);
 	}
 
+	@Override
+	public Member findMember(Long memberId) throws Exception {
+		Optional<Member> omem = memberRepository.findById(memberId);
+		if(omem.isEmpty())throw new Exception("멤버 없음");
+		return omem.get();
+	}
+
 }
