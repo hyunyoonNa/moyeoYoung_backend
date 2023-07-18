@@ -4,27 +4,31 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kosta.moyoung.feedroom.dto.LikeDTO;
 import com.kosta.moyoung.feedroom.dto.RoomFeedDTO;
+import com.kosta.moyoung.feedroom.entity.LikeEntity;
 import com.kosta.moyoung.feedroom.entity.RoomfeedEntity;
+import com.kosta.moyoung.feedroom.repository.LikeRepository;
 import com.kosta.moyoung.feedroom.repository.RoomfeedRepository;
-import com.kosta.moyoung.member.dto.TokenDto;
+import com.kosta.moyoung.member.entity.Member;
+import com.kosta.moyoung.member.repository.MemberRepository;
 import com.kosta.moyoung.openroom.entity.Room;
 import com.kosta.moyoung.openroom.repository.OpenRoomRepository;
+import com.kosta.moyoung.security.jwt.JwtUtil;
 @Service
 public class RoomfeedServiceImpl implements RoomfeedService {
    
@@ -33,23 +37,30 @@ public class RoomfeedServiceImpl implements RoomfeedService {
    
    @Autowired
    private RoomfeedRepository rfrepository;
+	
+   @Autowired
+   private MemberRepository memberRepository; 
    
    @Autowired
    private OpenRoomRepository oprepository;
+   
+   @Autowired
+   private LikeRepository likeRepo;
    
    private String dir = "C:/resources/upload/";
 
    @Override
    public void WriteFeed(RoomFeedDTO roomfeedDto, MultipartFile[] files) throws Exception {
       Date today = new Date(System.currentTimeMillis());
+      Long memberId = JwtUtil.getCurrentMemberId();
       roomfeedDto.setRoomCreateDate(today);
+      roomfeedDto.setMemberId(memberId);
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       String filenames = "";
 		if (files != null && files.length != 0) {
 			for (int i = 0; i < files.length; i++) {
 				if (files[i] != null && !files[i].isEmpty()) {
 					String fileName = files[i].getOriginalFilename();
-					System.out.println(fileName);
 					File dfile = new File(dir + fileName);
 					files[i].transferTo(dfile);
 				}
@@ -70,10 +81,14 @@ public class RoomfeedServiceImpl implements RoomfeedService {
 	   for (RoomfeedEntity roomFeedEntity : Rfeeds) {
 	        RoomFeedDTO roomFeedDTO = new RoomFeedDTO();
 	        roomFeedDTO.setTitle(roomFeedEntity.getTitle());
+	        roomFeedDTO.setMemberId(roomFeedEntity.getMember().getMemberId());
+	        roomFeedDTO.setNickname(roomFeedEntity.getMember().getNickname());
+	        roomFeedDTO.setProfilename(roomFeedEntity.getMember().getFileName());
 	        roomFeedDTO.setContent(roomFeedEntity.getContent());
 	        roomFeedDTO.setFeedId(roomFeedEntity.getFeedId());
 	        roomFeedDTO.setFilename(roomFeedEntity.getFilename());
 	        roomFeedDTO.setRoomCreateDate(roomFeedEntity.getRoomCreateDate());
+	        roomFeedDTO.setLikeCount(roomFeedEntity.getLikes().size());
 	        feeds.add(roomFeedDTO);
 	   }
 	   return feeds;
@@ -106,11 +121,40 @@ public class RoomfeedServiceImpl implements RoomfeedService {
 	public void modifyFeed(Long feedId, RoomFeedDTO roomfeedDto) throws Exception {
 		Optional<RoomfeedEntity> ofeed = rfrepository.findById(feedId);
 		RoomfeedEntity feed = ofeed.get();
-		
 		feed.setContent(roomfeedDto.getContent());
 		feed.setTitle(roomfeedDto.getTitle());
 		feed.setFilename(roomfeedDto.getFilename());
 		rfrepository.save(feed);
 	}
+
+	@Override
+	public void increaseLike(Long feedId, Long memberId) throws Exception {
+		LikeDTO like = new LikeDTO();
+		like.setFeedId(feedId);
+		like.setMemberId(memberId);
+		LikeEntity likes = modelMapper.map(like, LikeEntity.class);
+		likeRepo.save(likes);	
+	}
+	
+	@Override
+	public void decreaseLike(Long feedId, Long memberId) throws Exception {
+		likeRepo.deleteByFeedIdAndMemberId(feedId, memberId);
+	}
+
+	@Override
+	public List<Long> isLike(Long memberId) throws Exception {
+		List<Long> list = new ArrayList<>();
+		Optional<Member> omember = memberRepository.findById(memberId);
+		if(omember.isPresent()) {
+			Member member = omember.get();
+			List<LikeEntity> likes = member.getLike();
+			for(LikeEntity e : likes) {
+				list.add(e.getFeed().getFeedId());
+			}
+		}
+		return list;
+	}
+
+	
 }
 
