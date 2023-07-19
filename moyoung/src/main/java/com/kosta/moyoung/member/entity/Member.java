@@ -80,7 +80,7 @@ public class Member  {
 	@OneToMany(mappedBy="memberBookmark", fetch=FetchType.LAZY)
 	private List<Bookmark> bookmarks = new ArrayList<>();
 	
-	@OneToMany(mappedBy="feed", fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="member", fetch=FetchType.LAZY)
 	private List<LikeEntity> Like = new ArrayList<>();
 	
 	 @Builder

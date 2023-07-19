@@ -137,12 +137,35 @@ public class RoomFeedController {
    @PostMapping("writecomment/{feedId}")
    public ResponseEntity<String> writecomment(@PathVariable("feedId") Long feedId, @ModelAttribute CommentDTO commentDto){
 	   try {
-		   commentService.Writefeed(commentDto,feedId);
+		   commentService.WriteComment(commentDto,feedId);
 		   return new ResponseEntity<String>("댓글 작성 완료", HttpStatus.OK);
 	   }catch (Exception e) {
 		   e.printStackTrace();
 		   return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 	   }
+   }
+   
+   //댓글 조회
+   @GetMapping("selectcomment/{feedId}")
+   public ResponseEntity<List<CommentDTO>> selectcomment(@PathVariable("feedId") Long feedId){
+	    try {
+	    	commentService.selectComment(feedId);
+	    	return new ResponseEntity<List<CommentDTO>>(commentService.selectComment(feedId), HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<List<CommentDTO>>(HttpStatus.BAD_REQUEST);
+		}
+   }
+   
+   //댓글 삭제
+   @PostMapping("deletecomment/{commentId}")
+   public ResponseEntity<String> deletecomment(@PathVariable("commentId") Long commentId){
+	   	try {	
+	   		commentService.deleteComment(commentId);
+	   		return new ResponseEntity<String>("댓글 삭제 완료", HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
    }
    
    
@@ -155,6 +178,11 @@ public class RoomFeedController {
 			e.printStackTrace();
 		}
 	}
+   
+   @GetMapping("getmemberId")
+   public Long getmemberId() {
+	return JwtUtil.getCurrentMemberId();
+   }
    
    
 }

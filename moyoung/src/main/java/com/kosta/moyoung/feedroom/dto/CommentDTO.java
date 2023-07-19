@@ -1,6 +1,7 @@
 package com.kosta.moyoung.feedroom.dto;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 import lombok.Data;
 import lombok.Getter;
@@ -13,5 +14,7 @@ public class CommentDTO {
 	private Long memberId;
 	private Long feedId;
 	private String comment;
-	private Date commentCreateDate;
+	private LocalDateTime commentCreateDate;
+	private String nickname;
+	private String profilename;
 }
