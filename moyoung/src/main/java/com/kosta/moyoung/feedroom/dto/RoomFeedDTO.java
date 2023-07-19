@@ -25,4 +25,5 @@ public class RoomFeedDTO {
    private String filename;
    private Date roomCreateDate;
    private int likeCount = 0; // LikeCount 변수 추가하고 초기값을 0으로 설정
+   private int commentCount=0;
 }

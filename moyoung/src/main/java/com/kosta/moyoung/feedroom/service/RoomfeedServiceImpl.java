@@ -89,6 +89,7 @@ public class RoomfeedServiceImpl implements RoomfeedService {
 	        roomFeedDTO.setFilename(roomFeedEntity.getFilename());
 	        roomFeedDTO.setRoomCreateDate(roomFeedEntity.getRoomCreateDate());
 	        roomFeedDTO.setLikeCount(roomFeedEntity.getLikes().size());
+	        roomFeedDTO.setCommentCount(roomFeedEntity.getComments().size());
 	        feeds.add(roomFeedDTO);
 	   }
 	   return feeds;
@@ -145,6 +146,7 @@ public class RoomfeedServiceImpl implements RoomfeedService {
 	public List<Long> isLike(Long memberId) throws Exception {
 		List<Long> list = new ArrayList<>();
 		Optional<Member> omember = memberRepository.findById(memberId);
+		System.out.println(omember.get().getLike());
 		if(omember.isPresent()) {
 			Member member = omember.get();
 			List<LikeEntity> likes = member.getLike();
