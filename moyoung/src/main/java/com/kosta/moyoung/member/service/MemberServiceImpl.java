@@ -30,15 +30,16 @@ public class MemberServiceImpl implements MemberService {
 
 	@Transactional
 	@Override
-	public MemberResponseDto findMemberInfoById(Long memberId) {
+	public MemberResponseDto findMemberInfoById(Long memberId) throws Exception{
 		System.out.println(JwtUtil.getCurrentMemberId());
 		return memberRepository.findById(memberId).map(MemberResponseDto::of)
 				.orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
 	}
-
+	
+	
 	@Transactional
 	@Override
-	public MemberResponseDto findMemberInfoByEmail(String email) {
+	public MemberResponseDto findMemberInfoByEmail(String email) throws Exception {
 		return memberRepository.findByEmail(email).map(MemberResponseDto::of)
 				.orElseThrow(() -> new RuntimeException("유저 정보가 없습니다."));
 	}
