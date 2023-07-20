@@ -73,10 +73,15 @@ public class OpenRoomController {
 			PageInfo pageInfo = new PageInfo();
 			List<RoomDTO> list = orService.findRoomList(page, pageInfo, cnt);
 			res.put("pageInfo", pageInfo);
-			res.put("list", list);     
-			List<Long> isBookmarks = orService.isBookmarks(JwtUtil.getCurrentMemberId()); 
-			if(!isBookmarks.isEmpty()) {
-				res.put("isBookmarks", isBookmarks); 			 
+			res.put("list", list); 
+			if(JwtUtil.getCurrentMemberId()==null) {
+				System.out.println("아이디업슴");
+			}else {
+				List<Long> isBookmarks = orService.isBookmarks(JwtUtil.getCurrentMemberId()); 
+				if(!isBookmarks.isEmpty()) {
+					res.put("isBookmarks", isBookmarks); 			 
+				}
+				
 			}
 
 			return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
