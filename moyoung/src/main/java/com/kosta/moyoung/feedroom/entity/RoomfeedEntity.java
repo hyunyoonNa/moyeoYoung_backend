@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.data.relational.core.sql.Like;
+
 import com.kosta.moyoung.member.entity.Member;
 import com.kosta.moyoung.openroom.entity.Room;
 
@@ -27,10 +29,11 @@ import lombok.Setter;
 @Setter
 @Table(name="feed")
 public class RoomfeedEntity{
+	
    @Id
+   @Column(name = "feedId")
    @GeneratedValue(strategy=GenerationType.IDENTITY)
    private Long feedId;
- 
    
    @ManyToOne
    @JoinColumn(name ="roomId")
@@ -48,8 +51,11 @@ public class RoomfeedEntity{
    @JoinColumn(name ="memberId")
    private Member member;
    
-//   @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL)
-//   private List<Like> likes = new ArrayList<>();
+   @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL)
+   private List<LikeEntity> likes = new ArrayList<>();
+   
+   @OneToMany(mappedBy = "feed")
+   private List<CommentEntity> comments = new ArrayList<>();
 
    
    @Builder

@@ -44,7 +44,6 @@ public class MemberController {
 		try {
 			return ResponseEntity.ok(memberService.findMemberInfoById(JwtUtil.getCurrentMemberId()));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return new ResponseEntity(HttpStatus.BAD_REQUEST);
 		}
