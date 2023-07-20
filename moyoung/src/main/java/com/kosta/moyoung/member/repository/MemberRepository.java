@@ -14,6 +14,8 @@ public interface MemberRepository extends JpaRepository<Member, Long>{
 	//중복 가입 방지를 위한 existsByEmail 만 추가
 	Optional<Member> findByEmail(String email);
 	Optional<Member> findById(long memberId); 
+	Optional<Member> findByNickname(String nickname);
+	
 	boolean existsByEmail(String email);
 	boolean existsByNickname(String nickname);
 	
