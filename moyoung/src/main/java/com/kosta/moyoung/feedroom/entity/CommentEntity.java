@@ -1,6 +1,7 @@
 package com.kosta.moyoung.feedroom.entity;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,17 +33,17 @@ public class CommentEntity {
 	private Long commentId;
 	
 	@ManyToOne(fetch=FetchType.EAGER)   
-    @JoinColumn(name ="memberId")
+    @JoinColumn(name ="member_id")
     private Member member;
 	
     @ManyToOne
-    @JoinColumn(name = "feedId")
+    @JoinColumn(name = "feed_id")
     private RoomfeedEntity feed;
     
     @Column
     private String comment;
 
     @Column
-    private Date CommentCreateDate;
+    private LocalDateTime CommentCreateDate;
 	
 }

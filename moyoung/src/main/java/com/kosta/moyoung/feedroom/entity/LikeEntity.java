@@ -26,11 +26,11 @@ public class LikeEntity {
     private Long likeId;
 
     @ManyToOne
-    @JoinColumn(name = "feedId")
+    @JoinColumn(name = "feed_id")
     private RoomfeedEntity feed;
 
     @ManyToOne
-    @JoinColumn(name = "memberId")
+    @JoinColumn(name = "member_id")
     private Member member;
     
     @Builder

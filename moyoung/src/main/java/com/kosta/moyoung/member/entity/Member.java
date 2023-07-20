@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 
+import com.kosta.moyoung.note.entity.Note;
 import com.kosta.moyoung.feedroom.entity.LikeEntity;
 import com.kosta.moyoung.openroom.entity.Bookmark;
 import com.kosta.moyoung.openroom.entity.Room;
@@ -74,13 +75,18 @@ public class Member  {
 	@Enumerated(EnumType.STRING)
 	private Authority authority;
 	
+//	@OneToMany(mappedBy="sender", fetch = FetchType.LAZY)
+//	private List<Note> sendNotes = new ArrayList<>();
+//	
+//	@OneToMany(mappedBy="receiver", fetch = FetchType.LAZY)
+//	private List<Note> recevedNotes = new ArrayList<>();
 	@OneToMany(mappedBy="member", fetch=FetchType.EAGER)
 	private List<Room> rooms = new ArrayList<>();
 	
 	@OneToMany(mappedBy="memberBookmark", fetch=FetchType.LAZY)
 	private List<Bookmark> bookmarks = new ArrayList<>();
 	
-	@OneToMany(mappedBy="feed", fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="member", fetch=FetchType.LAZY)
 	private List<LikeEntity> Like = new ArrayList<>();
 	
 	 @Builder
@@ -94,25 +100,6 @@ public class Member  {
 	        this.authority = authority;
 	    }
 	 
-	 @Builder
-	 public Member(String nickname, String email, String fileName, Authority authority ) {
-	        this.nickname=nickname;
-	        this.email = email;
-	        this.fileName=fileName;
-	        this.authority = authority;
-	 }
-//	 @Builder
-//	 public Member(String email, String password, String nickname,  Provider provider, String profileContent, String fileName, Authority authority) {
-//	        this.email = email;
-//	        this.password = password;
-//	        this.nickname=nickname;
-//	        this.provider=provider;
-//	        
-//	        this.profileContent = profileContent;
-//	        this.fileName=fileName;
-//	        this.authority = authority;
-//	    }
-//	 
 //	 @Builder
 //	 public Member(String nickname, String email, String fileName, Authority authority ) {
 //	        this.nickname=nickname;

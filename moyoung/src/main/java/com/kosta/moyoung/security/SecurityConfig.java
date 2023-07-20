@@ -59,7 +59,7 @@ public class SecurityConfig {
             .antMatchers("/","/css/**","/images/**","/js/**","/favicon.ico").permitAll()
             .antMatchers("/room/**").permitAll() 
             .antMatchers("/feed/**").permitAll() 
-            
+            .antMatchers("/note/**").permitAll() 
             .antMatchers("/auth/**").permitAll()
             .antMatchers("/member/**").permitAll()
             .antMatchers("/login/oauth2/*").permitAll()
