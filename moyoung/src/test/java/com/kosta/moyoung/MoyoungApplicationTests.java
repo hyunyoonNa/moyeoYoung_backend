@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+
 import com.kosta.moyoung.member.entity.Member;
 import com.kosta.moyoung.member.repository.MemberRepository;
 import com.kosta.moyoung.openroom.repository.BookmarkRepository;
@@ -27,7 +28,7 @@ class MoyoungApplicationTests {
 	@Autowired
 	private MemberRepository memRepository; 
 	@Autowired
-	private BookmarkRepository bookmarkRepository;
+//	private BookmarkRepository bookmarkRepository;
 	
 	
 	@Test

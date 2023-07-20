@@ -44,8 +44,8 @@ public class Room {
 	@Column(nullable = false)
 	private Long roomUserCnt;  //멤버수
 	
-	@OneToMany(mappedBy="roomBookmark" , fetch=FetchType.LAZY)
-	private List<Bookmark> bookmarks = new ArrayList<>();
+//	@OneToMany(mappedBy="roomBookmark" , fetch=FetchType.LAZY)
+//	private List<Bookmark> bookmarks = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
 	private List<RoomfeedEntity> roomfeeds = new ArrayList<>();

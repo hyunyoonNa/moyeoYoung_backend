@@ -30,10 +30,7 @@ public class RoomfeedEntity{
    @Id
    @GeneratedValue(strategy=GenerationType.IDENTITY)
    private Long feedId;
-   
-   @ManyToOne(fetch=FetchType.EAGER)   
-   @JoinColumn(name ="memberId")
-   private Member member;
+ 
    
    @ManyToOne
    @JoinColumn(name ="roomId")
@@ -46,6 +43,14 @@ public class RoomfeedEntity{
    private Date roomCreateDate;
    @Column(nullable = true)
    private String filename;
+   
+   @ManyToOne(fetch=FetchType.EAGER)   
+   @JoinColumn(name ="memberId")
+   private Member member;
+   
+//   @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL)
+//   private List<Like> likes = new ArrayList<>();
+
    
    @Builder
    public static RoomfeedEntity createRoomfeedEntity(Member member, Room room, String content, String title, String filename) {
