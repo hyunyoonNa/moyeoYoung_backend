@@ -38,7 +38,7 @@ public class MemberController {
 
 	private final MemberService memberService;
 	private final MemberRepository memberRepository;
-
+	
 	@GetMapping("/mypage")
 	public ResponseEntity<MemberResponseDto> findMemberInfoById() {
 		try {
@@ -48,9 +48,11 @@ public class MemberController {
 			return new ResponseEntity(HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
+	
 	@GetMapping("/{email}")
 	public ResponseEntity<MemberResponseDto> findMemberInfoByEmail(@PathVariable String email) {
+		System.out.println(email);
 		try {
 			return ResponseEntity.ok(memberService.findMemberInfoByEmail(email));
 		} catch (Exception e) {

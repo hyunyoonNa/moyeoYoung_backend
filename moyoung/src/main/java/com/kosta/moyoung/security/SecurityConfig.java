@@ -60,6 +60,7 @@ public class SecurityConfig {
             .antMatchers("/room/**").permitAll() 
             .antMatchers("/feed/**").permitAll()             
             .antMatchers("/ws/**").permitAll()             
+            .antMatchers("/note/**").permitAll() 
             .antMatchers("/auth/**").permitAll()
             .antMatchers("/member/**").permitAll()
             .antMatchers("/login/oauth2/*").permitAll()
