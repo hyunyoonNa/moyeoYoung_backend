@@ -39,6 +39,18 @@ public class MemberController {
 	private final MemberService memberService;
 	private final MemberRepository memberRepository;
 	
+	@GetMapping("/profile/{nickname}")
+	public ResponseEntity<MemberResponseDto> memberProfile(@PathVariable String nickname){
+		try {
+		 MemberResponseDto memberDto = memberService.findMemberInfoByNickname(nickname);
+			return new ResponseEntity<MemberResponseDto>(memberDto, HttpStatus.OK);
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return new ResponseEntity<MemberResponseDto>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@GetMapping("/mypage")
 	public ResponseEntity<MemberResponseDto> findMemberInfoById() {
 		try {
