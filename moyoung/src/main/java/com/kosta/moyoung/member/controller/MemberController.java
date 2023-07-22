@@ -99,7 +99,7 @@ public class MemberController {
 				File dfile = new File(dir + imgName);
 				file.transferTo(dfile);
 			}
-			
+		 
 			
 			memberService.updateMember(memberId, memberRequestDto, file);
 			return new ResponseEntity<String>("수정완료", HttpStatus.OK);
