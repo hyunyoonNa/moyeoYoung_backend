@@ -31,7 +31,6 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional
 	@Override
 	public MemberResponseDto findMemberInfoById(Long memberId) throws Exception{
-		System.out.println(JwtUtil.getCurrentMemberId());
 		return memberRepository.findById(memberId).map(MemberResponseDto::of)
 				.orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
 	}
@@ -80,6 +79,18 @@ public class MemberServiceImpl implements MemberService {
 		Optional<Member> omem = memberRepository.findById(memberId);
 		if(omem.isEmpty())throw new Exception("멤버 없음");
 		return omem.get();
+	}
+
+
+	@Override
+	public MemberResponseDto findMemberInfoByNickname(String nickname) throws Exception {
+		  Optional<Member> omember = memberRepository.findByNickname(nickname);
+	        if (omember.isPresent()) {
+	            Member member = omember.get();
+	            return MemberResponseDto.of(member);
+	        } else {
+	            throw new Exception("해당 닉네임으로 조회된 회원이 없습니다.");
+	        }
 	}
 
 }
