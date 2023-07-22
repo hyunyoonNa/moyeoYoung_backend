@@ -44,8 +44,8 @@ public class Note {
 
 
 	@Setter
-	@Column(length = 1)
-	private String status;
+	@Column(nullable = false)
+	private boolean status; // 쪽지의 읽음 여부, 기본값은 false
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "sender_id")
@@ -74,6 +74,17 @@ public class Note {
 	public boolean isDeleted() {
 		return isDeletedBySender() && isDeletedByReceiver();
 	}
+	
+	 // 쪽지확인
+    public void markAsRead() {
+        this.status = true;
+    }
+
+    // 쪽지 미확인
+    public void markAsUnread() {
+        this.status = false;
+    }
+
 
 	@PrePersist
 	protected void onCreate() {
@@ -82,7 +93,7 @@ public class Note {
 	}
 
 	@Builder
-	public Note(String content, String sendDate, String receiveDate, String status,
+	public Note(String content, String sendDate, String receiveDate, boolean status,
 			Member sender, Member receiver, boolean deletedBySender, boolean deletedByReceiver) {
 		this.content = content;
 		this.sendDate = sendDate;
