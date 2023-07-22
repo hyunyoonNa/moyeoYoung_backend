@@ -54,7 +54,7 @@ public class RoomfeedEntity{
    @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL)
    private List<LikeEntity> likes = new ArrayList<>();
    
-   @OneToMany(mappedBy = "feed")
+   @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL)
    private List<CommentEntity> comments = new ArrayList<>();
 
    
