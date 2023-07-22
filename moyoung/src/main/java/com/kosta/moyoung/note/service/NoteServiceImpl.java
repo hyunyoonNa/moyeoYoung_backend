@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
@@ -32,7 +33,7 @@ public class NoteServiceImpl implements NoteService {
 	
 	@Transactional
 	@Override
-	public NoteDto write(NoteDto noteDto) throws Exception {
+	public void write(NoteDto noteDto) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println(noteDto.toString());
 		Optional<Member> receiver  = memberRepository.findByNickname(noteDto.getReceiverNickname());
@@ -42,6 +43,9 @@ public class NoteServiceImpl implements NoteService {
 		if (!receiver.isPresent() || !sender.isPresent()) {
 		    throw new Exception("Receiver or sender not found");
 		}
+		if (noteDto.getReceiverNickname().equals(noteDto.getSenderNickname())) {
+	        throw new Exception("자신에게는 쪽지를 보낼 수 없습니다.");
+	    }
 		
 		Note note = Note.builder()
 				.receiver(receiver.get())
@@ -51,7 +55,6 @@ public class NoteServiceImpl implements NoteService {
 				.deletedBySender(false)
 				.build();
 			noteRepository.save(note);
-			return NoteDto.toNote(note);
 	}
 	
 	@Transactional
@@ -91,7 +94,7 @@ public class NoteServiceImpl implements NoteService {
 			Long memberId = JwtUtil.getCurrentMemberId();
 			
 //		if (memberId.equals(note.getSender().getMemberId())) {
-		if (member == note.getSender()) {
+		if (member == note.getReceiver()) {
 			note.deleteByReceiver(); //받은사람 메세지 삭제
 			if(note.isDeleted()) {
 				//받은사람과 보낸사람 모두 삭제했을 시에 DB에서 삭제
@@ -102,7 +105,7 @@ public class NoteServiceImpl implements NoteService {
 				return "받은사람 쪽지 삭제";
 			}
 		}else {
-			return new IllegalArgumentException("유저 정보가 일치하지않습니다.");
+			return new IllegalArgumentException("이미 삭제된 쪽지입니다.");
 		}
 
 	}
@@ -150,6 +153,29 @@ public class NoteServiceImpl implements NoteService {
 			return new IllegalArgumentException("유저 정보가 일치하지않습니다.");
 		}
 
+	}
+	
+	@Transactional
+	@Override
+	public NoteDto detailtNote(Long noteId) throws Exception {
+		  // noteId를 사용하여 데이터베이스 등에서 해당 쪽지의 정보를 조회
+	    Note note = noteRepository.findById(noteId).orElseThrow(() -> {
+	    	return new IllegalArgumentException("쪽지를 찾을 수 없습니다.");
+	    });
+	    // NoteDto로 변환하여 반환
+	    NoteDto noteDto = NoteDto.toNote(note);
+
+	    return noteDto;
+	}
+
+	@Override
+	public void noteStatus(Long noteId) throws Exception {
+	    // 데이터베이스에서 쪽지를 조회
+        Note note = noteRepository.findById(noteId).orElseThrow(() -> new IllegalArgumentException("쪽지를 찾을 수 없습니다."));
+
+        // 쪽지의 읽음 상태를 업데이트
+        note.markAsRead();
+        noteRepository.save(note);
 	}
 
 
