@@ -18,7 +18,7 @@ public class NoteDto {
 	private String senderNickname;
 	private String receiverNickname;
 	private String sendDate;
-	private String status;
+	private boolean status;
 	
 	public static NoteDto toNote(Note note) {
 		return new  NoteDto(
@@ -27,10 +27,14 @@ public class NoteDto {
 				note.getSender().getNickname(),
 				note.getReceiver().getNickname(),
 				note.getSendDate(),
-				note.getStatus()
+				note.isStatus()
 			);
 		
 	}
+	// status 값을 문자열 "0" 또는 "1"로 변환하여 반환
+		public String getStatusAsString() {
+			return status ? "1" : "0";
+		}
 	
 	
 }
