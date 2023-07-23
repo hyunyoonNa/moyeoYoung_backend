@@ -38,20 +38,33 @@ public class MemberController {
 
 	private final MemberService memberService;
 	private final MemberRepository memberRepository;
-
+	
+	@GetMapping("/profile/{nickname}")
+	public ResponseEntity<MemberResponseDto> memberProfile(@PathVariable String nickname){
+		try {
+		 MemberResponseDto memberDto = memberService.findMemberInfoByNickname(nickname);
+			return new ResponseEntity<MemberResponseDto>(memberDto, HttpStatus.OK);
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return new ResponseEntity<MemberResponseDto>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@GetMapping("/mypage")
 	public ResponseEntity<MemberResponseDto> findMemberInfoById() {
 		try {
 			return ResponseEntity.ok(memberService.findMemberInfoById(JwtUtil.getCurrentMemberId()));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return new ResponseEntity(HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
+	
 	@GetMapping("/{email}")
 	public ResponseEntity<MemberResponseDto> findMemberInfoByEmail(@PathVariable String email) {
+		System.out.println(email);
 		try {
 			return ResponseEntity.ok(memberService.findMemberInfoByEmail(email));
 		} catch (Exception e) {
@@ -98,7 +111,7 @@ public class MemberController {
 				File dfile = new File(dir + imgName);
 				file.transferTo(dfile);
 			}
-			
+		 
 			
 			memberService.updateMember(memberId, memberRequestDto, file);
 			return new ResponseEntity<String>("수정완료", HttpStatus.OK);

@@ -33,4 +33,15 @@ public class MemberResponseDto {
 				.regdate(member.getRegdate())
 				.build();
 	}
+	
+	public static MemberResponseDto toMember(Member member) {
+	    return new MemberResponseDto(
+	    	member.getMemberId(),
+	        member.getEmail(),
+	        member.getNickname(),
+	        member.getProfileContent(),
+	        member.getFileName(),
+	        member.getRegdate()
+	    );
+	}
 }

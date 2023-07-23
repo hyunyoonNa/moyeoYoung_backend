@@ -22,6 +22,11 @@ public class CorsConfig {
         source.registerCorsConfiguration("/member/**", config);
         source.registerCorsConfiguration("/login/**", config);
         source.registerCorsConfiguration("/room/**", config);
+        source.registerCorsConfiguration("/note/**", config);
+        source.registerCorsConfiguration("/rooms/**", config);
+        source.registerCorsConfiguration("/room/**", config);
+        source.registerCorsConfiguration("/feed/**", config);
+        source.registerCorsConfiguration("/ws/**", config);
         return new CorsFilter(source);
     }
 }

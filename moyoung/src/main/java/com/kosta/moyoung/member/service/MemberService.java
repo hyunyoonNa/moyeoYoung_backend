@@ -24,6 +24,9 @@ public interface MemberService {
 	// 회원 탈퇴
 	void delete(Long memberId) throws Exception;
 	
+	//프로필 조회
+	MemberResponseDto findMemberInfoByNickname(String nickname) throws Exception;
+	
 	Member findMember(Long memberId)throws Exception;
 	
 	

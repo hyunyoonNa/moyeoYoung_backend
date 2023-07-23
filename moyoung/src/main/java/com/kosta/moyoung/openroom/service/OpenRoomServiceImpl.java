@@ -50,16 +50,15 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 	public Long makeRoom(RoomDTO roomDto, MultipartFile file) throws Exception { 
 		//1.개설일 설정
 		Date today = new Date(System.currentTimeMillis()); 
-		roomDto.setRoomCreateDate(today);
+		roomDto.setRoomCreateDate(today); 
 		//2. 유저id 설정
 		Member mem = memberService.findMember(JwtUtil.getCurrentMemberId()); 
-		
+		 
 		//3. 멤버수 설정
 		roomDto.setRoomUserCnt((long)1); 
 		// 파일입력
 		fileService.fileUpload(file);
-		// save
-//		Room room = modelMapper.map(roomDto, Room.class); 
+		// save 
 		Room room = new Room(roomDto, mem);
 		orRepository.save(room);  
 		return room.getRoomId();
@@ -70,12 +69,10 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		Optional<Room> oroom = orRepository.findById(id); 
 		if(oroom.isEmpty()) {
 			return null;
-		}
-		
-		return new RoomDTO(oroom.get());
+		} 
+		return new RoomDTO(oroom.get()); 
 	}
 	 
-
 	@Override
 	public List<RoomDTO> findRoomList(Integer page, PageInfo pageInfo, Integer cnt) throws Exception {
 		
@@ -189,7 +186,6 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 				list.add(b.getRoomBookmark().getRoomId());
 			}
 		}
-		System.out.println(list);
 		return list;
 	}
 
