@@ -2,6 +2,9 @@ package com.kosta.moyoung.member.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -27,6 +30,7 @@ import com.kosta.moyoung.member.repository.MemberRepository;
 import com.kosta.moyoung.member.service.MemberService;
 import com.kosta.moyoung.member.service.MemberServiceImpl;
 import com.kosta.moyoung.member.util.UserPrincipal;
+import com.kosta.moyoung.openroom.dto.RoomDTO;
 import com.kosta.moyoung.security.jwt.JwtUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -38,19 +42,19 @@ public class MemberController {
 
 	private final MemberService memberService;
 	private final MemberRepository memberRepository;
-	
+
 	@GetMapping("/profile/{nickname}")
-	public ResponseEntity<MemberResponseDto> memberProfile(@PathVariable String nickname){
+	public ResponseEntity<MemberResponseDto> memberProfile(@PathVariable String nickname) {
 		try {
-		 MemberResponseDto memberDto = memberService.findMemberInfoByNickname(nickname);
+			MemberResponseDto memberDto = memberService.findMemberInfoByNickname(nickname);
 			return new ResponseEntity<MemberResponseDto>(memberDto, HttpStatus.OK);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 			return new ResponseEntity<MemberResponseDto>(HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@GetMapping("/mypage")
 	public ResponseEntity<MemberResponseDto> findMemberInfoById() {
 		try {
@@ -60,8 +64,7 @@ public class MemberController {
 			return new ResponseEntity(HttpStatus.BAD_REQUEST);
 		}
 	}
-	
-	
+
 	@GetMapping("/{email}")
 	public ResponseEntity<MemberResponseDto> findMemberInfoByEmail(@PathVariable String email) {
 		System.out.println(email);
@@ -111,8 +114,7 @@ public class MemberController {
 				File dfile = new File(dir + imgName);
 				file.transferTo(dfile);
 			}
-		 
-			
+
 			memberService.updateMember(memberId, memberRequestDto, file);
 			return new ResponseEntity<String>("수정완료", HttpStatus.OK);
 		} catch (Exception e) {
@@ -133,6 +135,51 @@ public class MemberController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	// 북마크한 방 리스트
+	@GetMapping("/roomListWithBookmark")
+	public ResponseEntity<Map<String, Object>> roomListWithBookmark() {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			List<RoomDTO> list = memberService.roomListWithBookmark(JwtUtil.getCurrentMemberId());
+			map.put("list", list);
+			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	// 내가개설한 방 리스트
+	@GetMapping("/madeRoomList")
+	public ResponseEntity<Map<String, Object>> madeRoomList() {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			List<RoomDTO> list = memberService.madeRoomList(JwtUtil.getCurrentMemberId());
+			map.put("list", list);
+			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	// 내가 가입한 방 리스트
+	@GetMapping("/joinRoomList")
+	public ResponseEntity<Map<String, Object>> joinRoomList() {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			List<RoomDTO> list = memberService.joinRoomList(JwtUtil.getCurrentMemberId());
+			map.put("list", list);
+			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
 		}
 	}
 

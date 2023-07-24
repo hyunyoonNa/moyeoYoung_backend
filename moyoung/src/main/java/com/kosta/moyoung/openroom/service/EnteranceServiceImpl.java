@@ -33,9 +33,7 @@ public class EnteranceServiceImpl implements EnteranceService{
 	private OpenRoomRepository roomRepository;  
 
 	@Override
-	public void JoinRoom(Long roomId) throws Exception { 
-		Member mem = memberService.findMember(JwtUtil.getCurrentMemberId()); 
-		
+	public void JoinRoom(Long roomId, Member mem, boolean isHost) throws Exception {  
 		Optional<Room> oroom = roomRepository.findById(roomId); 
 		if(oroom.isEmpty())throw new Exception("방을 찾을 수 없습니다!"); 
 		Room room = oroom.get();
@@ -44,7 +42,7 @@ public class EnteranceServiceImpl implements EnteranceService{
 		
 		Date today = new Date(System.currentTimeMillis());  
 		
-		Enterance ent = new Enterance(today, oroom.get(),mem);
+		Enterance ent = new Enterance(today, oroom.get(),mem,isHost);
 		entRepository.save(ent); 
 	}
 

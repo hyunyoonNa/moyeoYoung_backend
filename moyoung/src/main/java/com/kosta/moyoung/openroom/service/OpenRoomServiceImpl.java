@@ -47,13 +47,10 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 	
 
 	@Override
-	public Long makeRoom(RoomDTO roomDto, MultipartFile file) throws Exception { 
+	public Long makeRoom(RoomDTO roomDto, MultipartFile file,Member mem) throws Exception { 
 		//1.개설일 설정
 		Date today = new Date(System.currentTimeMillis()); 
-		roomDto.setRoomCreateDate(today); 
-		//2. 유저id 설정
-		Member mem = memberService.findMember(JwtUtil.getCurrentMemberId()); 
-		 
+		roomDto.setRoomCreateDate(today);  
 		//3. 멤버수 설정
 		roomDto.setRoomUserCnt((long)1); 
 		// 파일입력
@@ -189,6 +186,8 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		return list;
 	}
 
+	
+	
 	 
 	
 

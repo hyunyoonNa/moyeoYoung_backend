@@ -13,15 +13,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kosta.moyoung.member.dto.MemberResponseDto;
+import com.kosta.moyoung.member.entity.Member;
 import com.kosta.moyoung.member.service.MemberService;
 import com.kosta.moyoung.openroom.dto.RoomDTO;
+import com.kosta.moyoung.openroom.service.EnteranceService;
 import com.kosta.moyoung.openroom.service.OpenRoomService;
 import com.kosta.moyoung.security.jwt.JwtUtil;
 import com.kosta.moyoung.util.FileService;
@@ -39,12 +40,16 @@ public class OpenRoomController {
 	private MemberService memberService;
 	@Autowired
 	private FileService fileService;
+	@Autowired
+	private EnteranceService enteranceService;
 
 	@PostMapping("/makeRoom") 
 	public ResponseEntity<Long> makeRoom(@ModelAttribute RoomDTO roomDto, 
 			@RequestParam(value = "file", required=false) MultipartFile file){ 
 		try {
-			Long roomId = orService.makeRoom(roomDto,file); 
+			Member mem = memberService.findMember(JwtUtil.getCurrentMemberId());  
+			Long roomId = orService.makeRoom(roomDto,file,mem); 
+			enteranceService.JoinRoom(roomId, mem, true);
 			return new ResponseEntity<Long>(roomId ,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -147,10 +152,8 @@ public class OpenRoomController {
 
 	@GetMapping("/bookmark/{roomId}")
 	public ResponseEntity<Map<String,Object>> bookmark(@PathVariable("roomId") Long roomId) {
-		try {
-			//유저id
-			MemberResponseDto mem = memberService.findMemberInfoById(JwtUtil.getCurrentMemberId());
-			Boolean isBookmark = orService.bookMark(roomId,mem.getMemberId()); 
+		try { 
+			Boolean isBookmark = orService.bookMark(roomId,JwtUtil.getCurrentMemberId()); 
 			Map<String,Object> map = new HashMap<>();
 			map.put("isBookmark", isBookmark);
 			return new ResponseEntity<Map<String,Object>>(map,HttpStatus.OK); 
@@ -160,6 +163,6 @@ public class OpenRoomController {
 			return new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST);
 		}
 	}
-	 
+	
  
 }

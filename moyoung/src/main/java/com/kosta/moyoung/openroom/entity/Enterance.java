@@ -37,12 +37,16 @@ public class Enterance {
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="memberId")  
 	private Member member;
+	
+	@Column
+	private boolean isHost;
 		 
 	@Builder
-	public Enterance(Date entRegDate, Room room, Member member) { 
+	public Enterance(Date entRegDate, Room room, Member member,boolean isHost) { 
 		this.entRegDate = entRegDate;
 		this.member = member;
 		this.room = room;
+		this.isHost = isHost;
 	}
 		
 		

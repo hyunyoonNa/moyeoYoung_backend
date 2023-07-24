@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kosta.moyoung.member.dto.MemberResponseDto;
+import com.kosta.moyoung.member.entity.Member;
+import com.kosta.moyoung.member.service.MemberService;
 import com.kosta.moyoung.openroom.dto.RoomDTO;
 import com.kosta.moyoung.openroom.service.EnteranceService;
 import com.kosta.moyoung.security.jwt.JwtUtil;
@@ -24,11 +26,14 @@ import com.kosta.moyoung.security.jwt.JwtUtil;
 public class EnteranceController {
 	@Autowired
 	private EnteranceService enteranceService;
+	@Autowired
+	private MemberService memberService;
 	
 	@PostMapping("/joinRoom") 
 	public ResponseEntity<String> joinRoom(@RequestBody Map<String,Long> map) {
 		try {
-			enteranceService.JoinRoom(map.get("roomId"));
+			Member mem = memberService.findMember(JwtUtil.getCurrentMemberId()); 
+			enteranceService.JoinRoom(map.get("roomId"),mem,false);
 			return new ResponseEntity<String>("가입되었습니다!",HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -41,8 +46,10 @@ public class EnteranceController {
 	public ResponseEntity<Map<String,Object>> roomMemberList(@PathVariable Long roomId) { 
 		Map<String, Object> res = new HashMap<>();
 		try { 
-			List<MemberResponseDto> list = enteranceService.findEnteranceList(roomId); 
+			List<MemberResponseDto> list = enteranceService.findEnteranceList(roomId);
+			
 			res.put("list", list);
+//			res.put("hostId", hostId);
 			return new ResponseEntity<Map<String,Object>>(res,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
