@@ -19,4 +19,5 @@ public interface RoomfeedService {
    void increaseLike(Long feedId, Long memberId) throws Exception;
    void decreaseLike(Long feedId, Long memberId) throws Exception;
    List<Long> isLike(Long memberId) throws Exception;
+   List<RoomFeedDTO> selectFeeds(Long memberId) throws Exception;
 }

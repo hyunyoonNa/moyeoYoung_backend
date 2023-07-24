@@ -168,6 +168,16 @@ public class RoomFeedController {
 		}
    }
    
+   // 마이페이지 피드 조회
+   @GetMapping("selectfeeds/{memberId}")
+   public ResponseEntity<List<RoomFeedDTO>> selectByMemberId(@PathVariable("memberId") Long memberId) {
+	   try {
+		   return new ResponseEntity<List<RoomFeedDTO>> (roomfeedservice.selectFeeds(memberId), HttpStatus.OK);
+	   } catch (Exception e) {
+		   e.printStackTrace();
+		   return new ResponseEntity<List<RoomFeedDTO>>(HttpStatus.BAD_REQUEST);
+	   }
+   }
    
  
    @GetMapping("/feedimg/{imgName}")
@@ -179,9 +189,11 @@ public class RoomFeedController {
 		}
 	}
    
+
+//   
    @GetMapping("getmemberId")
    public Long getmemberId() {
-	return JwtUtil.getCurrentMemberId();
+	  return JwtUtil.getCurrentMemberId();
    }
    
    

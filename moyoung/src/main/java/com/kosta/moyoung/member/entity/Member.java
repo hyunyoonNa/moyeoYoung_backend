@@ -17,6 +17,7 @@ import javax.persistence.PrePersist;
 
 import com.kosta.moyoung.note.entity.Note;
 import com.kosta.moyoung.feedroom.entity.LikeEntity;
+import com.kosta.moyoung.feedroom.entity.RoomfeedEntity;
 import com.kosta.moyoung.openroom.entity.Bookmark;
 import com.kosta.moyoung.openroom.entity.Room;
 

@@ -42,7 +42,7 @@ public class MemberController {
 	@GetMapping("/profile/{nickname}")
 	public ResponseEntity<MemberResponseDto> memberProfile(@PathVariable String nickname){
 		try {
-		 MemberResponseDto memberDto = memberService.findMemberInfoByNickname(nickname);
+			MemberResponseDto memberDto = memberService.findMemberInfoByNickname(nickname);
 			return new ResponseEntity<MemberResponseDto>(memberDto, HttpStatus.OK);
 		}catch (Exception e) {
 			// TODO: handle exception
