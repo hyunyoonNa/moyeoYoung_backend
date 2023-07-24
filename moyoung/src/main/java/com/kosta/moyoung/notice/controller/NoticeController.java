@@ -1,6 +1,7 @@
 package com.kosta.moyoung.notice.controller;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -27,7 +28,9 @@ public class NoticeController {
 
     @GetMapping("/rooms/{roomId}/notices")
     List<Notice> all(@PathVariable Long roomId) {
-        return repository.findByRoomId(roomId);
+    	List<Notice> notices = repository.findByRoomId(roomId);
+        Collections.reverse(notices);
+        return notices;
     }
 
     @PostMapping("/rooms/{roomId}/notices")

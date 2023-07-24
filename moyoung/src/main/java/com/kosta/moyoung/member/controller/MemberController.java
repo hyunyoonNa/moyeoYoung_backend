@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +50,6 @@ public class MemberController {
 			MemberResponseDto memberDto = memberService.findMemberInfoByNickname(nickname);
 			return new ResponseEntity<MemberResponseDto>(memberDto, HttpStatus.OK);
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 			return new ResponseEntity<MemberResponseDto>(HttpStatus.BAD_REQUEST);
 		}
@@ -76,36 +76,11 @@ public class MemberController {
 		}
 	}
 
-//	@PostMapping("/upload")
-//	public ResponseEntity<String> uploadProfileImage(
-//			@RequestPart(value = "fileName", required = false) MultipartFile fileName) {
-//		String dir = "C:/resources/upload/";
-//		// 업로드 성공 시 이미지의 URL을 반환
-//		try {
-//			if (fileName != null && !fileName.isEmpty()) {
-//				String imgName = fileName.getOriginalFilename();
-//				File dfile = new File(dir + imgName);
-//				fileName.transferTo(dfile);
-//			}
-//		} catch (IllegalStateException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		String uploadedFileName = fileName.getOriginalFilename();
-//
-//		return ResponseEntity.ok(uploadedFileName);
-//
-//	}
 
 	@PostMapping("/update/{memberId}")
 	public ResponseEntity<String> updateMemberProfile(@PathVariable Long memberId,
 			@ModelAttribute MemberRequestDto memberRequestDto,
 			@RequestPart(value = "file", required = false) MultipartFile file) {
-		System.out.println(memberRequestDto.getFileName());
-		System.out.println(file);
 		try {
 			if (file != null && !file.isEmpty()) {
 				String dir = "C:/resources/upload/";
@@ -114,7 +89,6 @@ public class MemberController {
 				File dfile = new File(dir + imgName);
 				file.transferTo(dfile);
 			}
-
 			memberService.updateMember(memberId, memberRequestDto, file);
 			return new ResponseEntity<String>("수정완료", HttpStatus.OK);
 		} catch (Exception e) {
@@ -138,6 +112,16 @@ public class MemberController {
 		}
 	}
 
+	// 회원탈퇴
+	@DeleteMapping("/delete/{memberId}")
+	public ResponseEntity<String> deleteMember(@PathVariable Long memberId) {
+		try {
+			memberService.deleteMember(memberId);
+			System.out.println(memberId);
+			return ResponseEntity.ok("회원 탈퇴가 성공적으로 처리되었습니다.");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 탈퇴 중 오류가 발생하였습니다.");
+      
 	// 북마크한 방 리스트
 	@GetMapping("/roomListWithBookmark")
 	public ResponseEntity<Map<String, Object>> roomListWithBookmark() {
