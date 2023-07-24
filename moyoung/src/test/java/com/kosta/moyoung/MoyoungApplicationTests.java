@@ -1,15 +1,19 @@
 package com.kosta.moyoung;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-
 import com.kosta.moyoung.member.entity.Member;
 import com.kosta.moyoung.member.repository.MemberRepository;
+import com.kosta.moyoung.member.service.MemberService;
+import com.kosta.moyoung.openroom.entity.Enterance;
+import com.kosta.moyoung.openroom.entity.Room;
 import com.kosta.moyoung.openroom.repository.BookmarkRepository;
+import com.kosta.moyoung.openroom.repository.EnteranceRepository;
 import com.kosta.moyoung.openroom.repository.OpenRoomRepository;
 import com.kosta.moyoung.openroom.service.OpenRoomService;
 import com.kosta.moyoung.security.jwt.JwtUtil;
@@ -21,6 +25,10 @@ class MoyoungApplicationTests {
 	@Autowired
 	private MemberRepository memberRepository;
 	
+	
+	@Autowired
+	private MemberService memberService;
+	
 	@Autowired
 	private OpenRoomRepository orRepository;
 	@Autowired
@@ -28,7 +36,9 @@ class MoyoungApplicationTests {
 	@Autowired
 	private MemberRepository memRepository; 
 	@Autowired
-//	private BookmarkRepository bookmarkRepository;
+	private EnteranceRepository entRepository;
+	@Autowired
+	private BookmarkRepository bookmarkRepository;
 	
 	
 	@Test
@@ -59,5 +69,14 @@ class MoyoungApplicationTests {
 //			e.printStackTrace();
 //		}
 //	}
-
+	 
+//	@Test
+//	void memberList() {
+//		try {
+//			List<Enterance> list = entRepository.findByRoomRoomId(44L);
+//			System.out.println(list);
+//		}catch(Exception e) {
+//			e.printStackTrace();
+//		}
+//	} 
 }

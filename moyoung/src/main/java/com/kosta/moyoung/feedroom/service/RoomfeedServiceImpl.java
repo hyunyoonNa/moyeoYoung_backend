@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -155,6 +156,32 @@ public class RoomfeedServiceImpl implements RoomfeedService {
 			}
 		}
 		return list;
+	}
+
+	@Override
+	public List<RoomFeedDTO> selectFeeds(Long memberId) throws Exception {
+		Optional<Member> member = memberRepository.findById(memberId);
+		List<RoomFeedDTO> feeds = new ArrayList<>();
+		int roomsize = member.get().getRooms().size();
+		for(int i = 0; i<=roomsize-1; i++) {
+			List<RoomfeedEntity> Rfeeds = member.get().getRooms().get(i).getRoomfeeds();
+			for (RoomfeedEntity roomFeedEntity : Rfeeds) {
+			        RoomFeedDTO roomFeedDTO = new RoomFeedDTO();
+			        roomFeedDTO.setTitle(roomFeedEntity.getTitle());
+			        roomFeedDTO.setMemberId(memberId);
+			        roomFeedDTO.setRoomId(roomFeedEntity.getRoom().getRoomId());
+			        roomFeedDTO.setNickname(roomFeedEntity.getMember().getNickname());
+			        roomFeedDTO.setProfilename(roomFeedEntity.getMember().getFileName());
+			        roomFeedDTO.setContent(roomFeedEntity.getContent());
+			        roomFeedDTO.setFeedId(roomFeedEntity.getFeedId());
+			        roomFeedDTO.setFilename(roomFeedEntity.getFilename());
+			        roomFeedDTO.setRoomCreateDate(roomFeedEntity.getRoomCreateDate());
+			        roomFeedDTO.setLikeCount(roomFeedEntity.getLikes().size());
+			        roomFeedDTO.setCommentCount(roomFeedEntity.getComments().size());
+			        feeds.add(roomFeedDTO);
+			   }
+		}
+		return feeds;
 	}
 
 	
