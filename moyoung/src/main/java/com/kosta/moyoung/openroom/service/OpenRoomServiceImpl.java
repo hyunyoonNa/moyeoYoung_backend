@@ -51,7 +51,8 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		//1.개설일 설정
 		Date today = new Date(System.currentTimeMillis()); 
 		roomDto.setRoomCreateDate(today);   
-		// 파일입력
+		roomDto.setRoomUserCnt(1L);
+		// 파일입력s
 		fileService.fileUpload(file); 
 		// save 
 		Room room = new Room(roomDto, mem);

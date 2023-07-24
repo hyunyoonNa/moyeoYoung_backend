@@ -162,9 +162,9 @@ public class RoomfeedServiceImpl implements RoomfeedService {
 	public List<RoomFeedDTO> selectFeeds(Long memberId) throws Exception {
 		Optional<Member> member = memberRepository.findById(memberId);
 		List<RoomFeedDTO> feeds = new ArrayList<>();
-		int roomsize = member.get().getRooms().size();
+		int roomsize = member.get().getJoindRooms().size();
 		for(int i = 0; i<=roomsize-1; i++) {
-			List<RoomfeedEntity> Rfeeds = member.get().getRooms().get(i).getRoomfeeds();
+			List<RoomfeedEntity> Rfeeds = member.get().getJoindRooms().get(i).getRoom().getRoomfeeds();
 			for (RoomfeedEntity roomFeedEntity : Rfeeds) {
 			        RoomFeedDTO roomFeedDTO = new RoomFeedDTO();
 			        roomFeedDTO.setTitle(roomFeedEntity.getTitle());
