@@ -46,7 +46,6 @@ public class MemberController {
 			MemberResponseDto memberDto = memberService.findMemberInfoByNickname(nickname);
 			return new ResponseEntity<MemberResponseDto>(memberDto, HttpStatus.OK);
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 			return new ResponseEntity<MemberResponseDto>(HttpStatus.BAD_REQUEST);
 		}
@@ -73,29 +72,6 @@ public class MemberController {
 		}
 	}
 
-//	@PostMapping("/upload")
-//	public ResponseEntity<String> uploadProfileImage(
-//			@RequestPart(value = "fileName", required = false) MultipartFile fileName) {
-//		String dir = "C:/resources/upload/";
-//		// 업로드 성공 시 이미지의 URL을 반환
-//		try {
-//			if (fileName != null && !fileName.isEmpty()) {
-//				String imgName = fileName.getOriginalFilename();
-//				File dfile = new File(dir + imgName);
-//				fileName.transferTo(dfile);
-//			}
-//		} catch (IllegalStateException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		String uploadedFileName = fileName.getOriginalFilename();
-//
-//		return ResponseEntity.ok(uploadedFileName);
-//
-//	}
 
 	@PostMapping("/update/{memberId}")
 	public ResponseEntity<String> updateMemberProfile(@PathVariable Long memberId,
@@ -109,7 +85,6 @@ public class MemberController {
 				File dfile = new File(dir + imgName);
 				file.transferTo(dfile);
 			}
-
 			memberService.updateMember(memberId, memberRequestDto, file);
 			return new ResponseEntity<String>("수정완료", HttpStatus.OK);
 		} catch (Exception e) {
