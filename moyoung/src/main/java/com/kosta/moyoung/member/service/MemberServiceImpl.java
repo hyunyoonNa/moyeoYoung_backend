@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,12 +40,11 @@ public class MemberServiceImpl implements MemberService {
 	
 	@Transactional
 	@Override
-	public MemberResponseDto findMemberInfoById(Long memberId) throws Exception{
+	public MemberResponseDto findMemberInfoById(Long memberId) throws Exception {
 		return memberRepository.findById(memberId).map(MemberResponseDto::of)
 				.orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
 	}
-	
-	
+
 	@Transactional
 	@Override
 	public MemberResponseDto findMemberInfoByEmail(String email) throws Exception {
@@ -53,28 +53,33 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public void updateMember(Long memberId, MemberRequestDto memberRequestDto, MultipartFile fileName) throws Exception {
+	public void updateMember(Long memberId, MemberRequestDto memberRequestDto, MultipartFile fileName)
+			throws Exception {
 		Optional<Member> omember = memberRepository.findById(memberId);
 		Member member = omember.get();
-		
+
 		member.setFileName(memberRequestDto.getFileName());
 		member.setNickname(memberRequestDto.getNickname());
 		member.setProfileContent(memberRequestDto.getProfileContent());
 		memberRepository.save(member);
-		
+
 	}
 
 	@Transactional
 	@Override
-	public void delete(Long memberId) throws Exception {
-		// TODO Auto-generated method stub
-
+	public void deleteMember(Long memberId) throws Exception {
+		Optional<Member> omember = memberRepository.findById(memberId);
+		System.out.println(memberId);
+		Member member = omember.orElseThrow(() -> new RuntimeException("해당하는 회원정보를 찾을 수 없습니다."));
+		System.out.println(member);
+		memberRepository.delete(member);
 	}
 
 	@Override
-	public void updatePassword(@RequestParam String email, @ModelAttribute PasswordRequestDto passwordRequestDto) throws Exception {
-		
-		Optional<Member> omember=  memberRepository.findByEmail(email);
+	public void updatePassword(@RequestParam String email, @ModelAttribute PasswordRequestDto passwordRequestDto)
+			throws Exception {
+
+		Optional<Member> omember = memberRepository.findByEmail(email);
 		System.out.println(" : :  : = = = " + omember.get().getEmail());
 		System.out.println(email);
 		Member member = omember.get();
@@ -86,20 +91,20 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public Member findMember(Long memberId) throws Exception {
 		Optional<Member> omem = memberRepository.findById(memberId);
-		if(omem.isEmpty())throw new Exception("멤버 없음");
+		if (omem.isEmpty())
+			throw new Exception("멤버 없음");
 		return omem.get();
 	}
 
-
 	@Override
 	public MemberResponseDto findMemberInfoByNickname(String nickname) throws Exception {
-		  Optional<Member> omember = memberRepository.findByNickname(nickname);
-	        if (omember.isPresent()) {
-	            Member member = omember.get();
-	            return MemberResponseDto.of(member);
-	        } else {
-	            throw new Exception("해당 닉네임으로 조회된 회원이 없습니다.");
-	        }
+		Optional<Member> omember = memberRepository.findByNickname(nickname);
+		if (omember.isPresent()) {
+			Member member = omember.get();
+			return MemberResponseDto.of(member);
+		} else {
+			throw new Exception("해당 닉네임으로 조회된 회원이 없습니다.");
+		}
 	}
 	
 	
