@@ -37,7 +37,7 @@ public class RoomDTO {
 		this.roomCategory = room.getRoomCategory();
 		this.roomCreateDate = room.getRoomCreateDate();
 		this.roomType = room.getRoomType();
-		this.memberId = room.getMember().getMemberId();
+		this.memberId = room.getHost().getMemberId();
 		this.roomUserCnt = room.getRoomUserCnt();
 		
 		
