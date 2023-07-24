@@ -51,11 +51,14 @@ public class Room {
 	
 	@OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
 	private List<RoomfeedEntity> roomfeeds = new ArrayList<>();
-	   
+	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="memberId")  
-	private Member member; //방장아이디
-//	private Long memberId;
+	private Member host; //방장아이디 
+	
+	@OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
+	private List<Enterance> members = new ArrayList<>();
+	
 	
 	@Builder 
 	public Room(Long roomId, String roomTitle, String roomContent, String roomImage, String roomCategory,
@@ -79,7 +82,7 @@ public class Room {
 		this.roomCategory = roomDto.getRoomCategory();
 		this.roomCreateDate = roomDto.getRoomCreateDate();
 		this.roomType = roomDto.getRoomType();
-		this.member = member;
+		this.host = member;
 		this.roomUserCnt = roomDto.getRoomUserCnt();
 	}
 	

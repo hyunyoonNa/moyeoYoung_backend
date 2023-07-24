@@ -2,6 +2,9 @@ package com.kosta.moyoung.member.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -28,6 +31,7 @@ import com.kosta.moyoung.member.repository.MemberRepository;
 import com.kosta.moyoung.member.service.MemberService;
 import com.kosta.moyoung.member.service.MemberServiceImpl;
 import com.kosta.moyoung.member.util.UserPrincipal;
+import com.kosta.moyoung.openroom.dto.RoomDTO;
 import com.kosta.moyoung.security.jwt.JwtUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -117,6 +121,49 @@ public class MemberController {
 			return ResponseEntity.ok("회원 탈퇴가 성공적으로 처리되었습니다.");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 탈퇴 중 오류가 발생하였습니다.");
+      
+	// 북마크한 방 리스트
+	@GetMapping("/roomListWithBookmark")
+	public ResponseEntity<Map<String, Object>> roomListWithBookmark() {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			List<RoomDTO> list = memberService.roomListWithBookmark(JwtUtil.getCurrentMemberId());
+			map.put("list", list);
+			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	// 내가개설한 방 리스트
+	@GetMapping("/madeRoomList")
+	public ResponseEntity<Map<String, Object>> madeRoomList() {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			List<RoomDTO> list = memberService.madeRoomList(JwtUtil.getCurrentMemberId());
+			map.put("list", list);
+			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	// 내가 가입한 방 리스트
+	@GetMapping("/joinRoomList")
+	public ResponseEntity<Map<String, Object>> joinRoomList() {
+		Map<String, Object> map = new HashMap<>();
+		try {
+			List<RoomDTO> list = memberService.joinRoomList(JwtUtil.getCurrentMemberId());
+			map.put("list", list);
+			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
 		}
 	}
 

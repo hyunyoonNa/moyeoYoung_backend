@@ -27,6 +27,7 @@ public class CorsConfig {
         source.registerCorsConfiguration("/room/**", config);
         source.registerCorsConfiguration("/feed/**", config);
         source.registerCorsConfiguration("/ws/**", config);
+        source.registerCorsConfiguration("/todos/**", config);
         return new CorsFilter(source);
     }
 }
