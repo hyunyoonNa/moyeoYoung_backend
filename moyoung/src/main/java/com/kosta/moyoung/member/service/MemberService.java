@@ -22,7 +22,7 @@ public interface MemberService {
 	void updatePassword(String email, PasswordRequestDto passwordRequestDto) throws Exception;
 	
 	// 회원 탈퇴
-	void delete(Long memberId) throws Exception;
+	void deleteMember(Long memberId) throws Exception;
 	
 	//프로필 조회
 	MemberResponseDto findMemberInfoByNickname(String nickname) throws Exception;
