@@ -49,12 +49,12 @@ public class Note {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "sender_id")
-	@OnDelete(action = OnDeleteAction.NO_ACTION)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Member sender;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "receive_id")
-	@OnDelete(action = OnDeleteAction.NO_ACTION)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Member receiver;
 
 	@Column(nullable = false)
