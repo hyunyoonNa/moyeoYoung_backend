@@ -49,7 +49,7 @@ public class OpenRoomController {
 		try {
 			Member mem = memberService.findMember(JwtUtil.getCurrentMemberId());  
 			Long roomId = orService.makeRoom(roomDto,file,mem); 
-			enteranceService.JoinRoom(roomId, mem, true);
+			enteranceService.JoinRoom(roomId, mem,true);
 			return new ResponseEntity<Long>(roomId ,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();

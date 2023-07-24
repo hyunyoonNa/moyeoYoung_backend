@@ -19,6 +19,7 @@ import com.kosta.moyoung.member.entity.Member;
 import com.kosta.moyoung.member.service.MemberService;
 import com.kosta.moyoung.openroom.dto.RoomDTO;
 import com.kosta.moyoung.openroom.service.EnteranceService;
+import com.kosta.moyoung.openroom.service.OpenRoomService;
 import com.kosta.moyoung.security.jwt.JwtUtil;
 
 @RestController
@@ -28,7 +29,8 @@ public class EnteranceController {
 	private EnteranceService enteranceService;
 	@Autowired
 	private MemberService memberService;
-	
+	@Autowired
+	private OpenRoomService openRoomService;
 	@PostMapping("/joinRoom") 
 	public ResponseEntity<String> joinRoom(@RequestBody Map<String,Long> map) {
 		try {
@@ -42,14 +44,16 @@ public class EnteranceController {
 		}
 	}
 
+	//방 멤버 리스트
 	@GetMapping("/memberList/{roomId}") 
 	public ResponseEntity<Map<String,Object>> roomMemberList(@PathVariable Long roomId) { 
 		Map<String, Object> res = new HashMap<>();
 		try { 
 			List<MemberResponseDto> list = enteranceService.findEnteranceList(roomId);
-			
+			RoomDTO room = openRoomService.selectById(roomId); 
 			res.put("list", list);
-//			res.put("hostId", hostId);
+			res.put("hostId", room.getMemberId()); 
+			res.put("logInId", JwtUtil.getCurrentMemberId());
 			return new ResponseEntity<Map<String,Object>>(res,HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -57,18 +61,5 @@ public class EnteranceController {
 			
 		}
 	}
-	//마이페이지 가입한 방 보기
-	@GetMapping("/joinRoomList") 
-	public ResponseEntity<Map<String,Object>> joinRoomList() { 
-		Map<String, Object> res = new HashMap<>();
-		try { 
-			List<RoomDTO> list = enteranceService.joinRoomList(JwtUtil.getCurrentMemberId()); 
-			res.put("list", list);
-			return new ResponseEntity<Map<String,Object>>(res,HttpStatus.OK);
-		}catch(Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST);
-			
-		}
-	}
+	
 }

@@ -37,12 +37,14 @@ public class EnteranceServiceImpl implements EnteranceService{
 		Optional<Room> oroom = roomRepository.findById(roomId); 
 		if(oroom.isEmpty())throw new Exception("방을 찾을 수 없습니다!"); 
 		Room room = oroom.get();
-		room.setRoomUserCnt(room.getRoomUserCnt()+1);
+		if(!isHost) {
+			room.setRoomUserCnt(room.getRoomUserCnt()+1); 			
+		}
 		roomRepository.save(room); 
 		
 		Date today = new Date(System.currentTimeMillis());  
 		
-		Enterance ent = new Enterance(today, oroom.get(),mem,isHost);
+		Enterance ent = new Enterance(today, oroom.get(),mem);
 		entRepository.save(ent); 
 	}
 
@@ -61,20 +63,6 @@ public class EnteranceServiceImpl implements EnteranceService{
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public List<RoomDTO> joinRoomList(Long memberId) throws Exception { 
-		List<RoomDTO> dtoList = new ArrayList<>(); 
-		//멤버아디로 가입테이블에서 룸아이디 찾기
-		List<Enterance> entList  = entRepository.findByMemberMemberId(memberId); 
-		//아이디에 해당하는 방 가져오기
-			for(Enterance ent : entList) {
-				dtoList.add(new RoomDTO(ent.getRoom()));
-			}
-		
-		return dtoList;
-	}
-	
-	
+ 
 	
 }
