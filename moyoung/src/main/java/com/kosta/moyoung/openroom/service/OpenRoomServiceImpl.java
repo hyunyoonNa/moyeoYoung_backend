@@ -50,7 +50,8 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 	public Long makeRoom(RoomDTO roomDto, MultipartFile file,Member mem) throws Exception { 
 		//1.개설일 설정
 		Date today = new Date(System.currentTimeMillis()); 
-		roomDto.setRoomCreateDate(today);   
+		roomDto.setRoomCreateDate(today);  
+		roomDto.setRoomUserCnt(1L);
 		// 파일입력
 		fileService.fileUpload(file); 
 		// save 
