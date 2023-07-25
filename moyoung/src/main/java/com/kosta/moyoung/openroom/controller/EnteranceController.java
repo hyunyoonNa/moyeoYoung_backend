@@ -56,8 +56,7 @@ public class EnteranceController {
 		try { 
 			List<MemberResponseDto> list = enteranceService.findEnteranceList(roomId);
 			RoomDTO room = openRoomService.selectById(roomId); 
-			res.put("list", list);
-			res.put("hostId", room.getMemberId()); 
+			res.put("list", list); 
 			res.put("logInId", JwtUtil.getCurrentMemberId());
 			return new ResponseEntity<Map<String,Object>>(res,HttpStatus.OK);
 		}catch(Exception e) {

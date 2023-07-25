@@ -14,7 +14,7 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    private String from;
+    private String msgFrom;
     private String text;
     private String image; // 추가
     private String profileImage; // 추가

@@ -78,6 +78,9 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.7.1'
 	
+	//@Type ("jsonb")를 사용하기위한의존성
+	implementation 'com.vladmihalcea:hibernate-types-52:2.17.3'
+	
 	// sockjs
 	implementation 'org.webjars:sockjs-client:1.5.1'
 	// stomp
