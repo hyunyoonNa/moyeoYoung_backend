@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kosta.moyoung.member.entity.Member;
@@ -54,28 +56,59 @@ public class NoteController {
 		}
 	}
 
+//	@GetMapping("/received")
+//	public ResponseEntity<Map<String, Object>> receiveNote() {
+//		Map<String, Object> res = new HashMap<>();
+//		List<NoteDto> receiveList = null;
+//		try {
+//			Optional<Member> member = memberRepository.findById(JwtUtil.getCurrentMemberId());
+//			if (member.isEmpty()) {
+//				throw new Exception("아이디 오류");
+//			} else {
+//				receiveList = noteService.receiveNote(member.get());
+//				res.put("notes", receiveList);
+//			}
+//			return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
+//		}
+//	}
+	
 	@GetMapping("/received")
-	public ResponseEntity<Map<String, Object>> receiveNote() {
-		Map<String, Object> res = new HashMap<>();
-		List<NoteDto> receiveList = null;
-		try {
-			Optional<Member> member = memberRepository.findById(JwtUtil.getCurrentMemberId());
-			if (member.isEmpty()) {
-				throw new Exception("아이디 오류");
-			} else {
-				receiveList = noteService.receiveNote(member.get());
-				res.put("notes", receiveList);
-			}
-			return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity<Map<String, Object>> receiveNote(
+	    @RequestParam(defaultValue = "0") int page,
+	    @RequestParam(defaultValue = "8") int pageSize
+	) {
+	    Map<String, Object> res = new HashMap<>();
+	    List<NoteDto> receiveList = null;
+	    try {
+	        Optional<Member> member = memberRepository.findById(JwtUtil.getCurrentMemberId());
+	        if (member.isEmpty()) {
+	            throw new Exception("아이디 오류");
+	        } else {
+	            // 페이지네이션에 필요한 쪽지 데이터를 해당 페이지만큼 가져옵니다.
+	            Page<NoteDto> receivedNotesPage = noteService.getReceivedNotesByPage(member.get(), page, pageSize);
+	            receiveList = receivedNotesPage.getContent();
+
+	            // 총 페이지 수와 전체 아이템 수를 프론트엔드로 전달합니다.
+	            res.put("totalPages", receivedNotesPage.getTotalPages());
+	            res.put("totalItems", receivedNotesPage.getTotalElements());
+	            res.put("notes", receiveList);
+	        }
+	        return new ResponseEntity<>(res, HttpStatus.OK);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	    }
 	}
+
+	
+
+
 
 	@DeleteMapping("/received/delete/{noteId}")
 	public ResponseEntity<Boolean> deleteReceivedNote(@PathVariable Long noteId) {
-		System.out.println(noteId);
 		try {
 			Optional<Member> member = memberRepository.findById(JwtUtil.getCurrentMemberId());
 			if (member.isEmpty()) {
@@ -92,23 +125,68 @@ public class NoteController {
 
 
 	@GetMapping("/sent")
-	public ResponseEntity<Map<String, Object>> sendNotes() {
-		Map<String, Object> res = new HashMap<>();
-		List<NoteDto> sentList = null;
-		try {
-			Optional<Member> member = memberRepository.findById(JwtUtil.getCurrentMemberId());
-			if (member.isEmpty()) {
-				throw new Exception("아이디 오류");
-			} else {
-				sentList = noteService.sentNote(member.get());
-				res.put("notes", sentList);
-			}
-			return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<Map<String, Object>>(HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity<Map<String, Object>> sendNotes(
+	    @RequestParam(defaultValue = "0") int page,
+	    @RequestParam(defaultValue = "8") int pageSize
+	) {
+	    Map<String, Object> res = new HashMap<>();
+	    List<NoteDto> sentList = null;
+	    try {
+	        Optional<Member> member = memberRepository.findById(JwtUtil.getCurrentMemberId());
+	        if (member.isEmpty()) {
+	            throw new Exception("아이디 오류");
+	        } else {
+	            Page<NoteDto> sentNotesPage = noteService.getSentNotesByPage(member.get(), page, pageSize);
+	            sentList = sentNotesPage.getContent();
+
+	            res.put("totalPages", sentNotesPage.getTotalPages());
+	            res.put("totalItems", sentNotesPage.getTotalElements());
+	            res.put("notes", sentList);
+	        }
+	        return new ResponseEntity<>(res, HttpStatus.OK);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	    }
 	}
+
+
+	
+//	@GetMapping("/sent")
+//	public ResponseEntity<Map<String, Object>> sendNotes(
+//	    @RequestParam(defaultValue = "0") int page,
+//	    @RequestParam(defaultValue = "8") int pageSize
+//	) {
+//	    Map<String, Object> res = new HashMap<>();
+//	    List<NoteDto> sentList = null;
+//	    try {
+//	        Optional<Member> member = memberRepository.findById(JwtUtil.getCurrentMemberId());
+//	        if (member.isEmpty()) {
+//	            throw new Exception("아이디 오류");
+//	        } else {
+//	            // 페이지네이션에 필요한 쪽지 데이터를 해당 페이지만큼 가져옵니다.
+//	            Page<NoteDto> sentNotesPage = noteService.getSentNotesByPage(member.get(), page, pageSize);
+//	            sentList = sentNotesPage.getContent();
+//
+//	            // 총 페이지 수와 전체 아이템 수를 프론트엔드로 전달합니다.
+//	            res.put("totalPages", sentNotesPage.getTotalPages());
+//	            res.put("totalItems", sentNotesPage.getTotalElements());
+//	            res.put("notes", sentList);
+//	        }
+//	        return new ResponseEntity<>(res, HttpStatus.OK);
+//	    } catch (Exception e) {
+//	        e.printStackTrace();
+//	        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//	    }
+//	}
+
+	
+	
+	
+	
+	
+	
+	
 
 	@DeleteMapping("/sent/delete/{noteId}")
 	public ResponseEntity<Boolean> deleteSentNote(@PathVariable Long noteId) {

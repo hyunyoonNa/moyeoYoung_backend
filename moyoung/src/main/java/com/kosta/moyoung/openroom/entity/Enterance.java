@@ -11,6 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.kosta.moyoung.member.entity.Member;
 import com.kosta.moyoung.openroom.dto.EnteranceDTO;
 
@@ -35,7 +38,8 @@ public class Enterance {
 	private Room room;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="memberId")  
+	@JoinColumn(name="memberId") 
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Member member;
 	 
 		 

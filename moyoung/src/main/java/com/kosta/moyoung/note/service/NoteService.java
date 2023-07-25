@@ -2,6 +2,8 @@ package com.kosta.moyoung.note.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.kosta.moyoung.member.entity.Member;
 import com.kosta.moyoung.note.dto.NoteDto;
 
@@ -21,5 +23,7 @@ public interface NoteService {
 	
 	//쪽지상태업데이트
 	void noteStatus (Long noteId) throws Exception;
+	Page<NoteDto> getReceivedNotesByPage(Member member, int page, int pageSize);
+	Page<NoteDto> getSentNotesByPage(Member member, int page, int pageSize);
 
 }
