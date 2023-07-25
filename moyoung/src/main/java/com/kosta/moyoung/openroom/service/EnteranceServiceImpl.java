@@ -45,7 +45,7 @@ public class EnteranceServiceImpl implements EnteranceService{
 		Date today = new Date(System.currentTimeMillis());  
 		
 		Enterance ent = new Enterance(today, oroom.get(),mem);
-		entRepository.save(ent); 
+		entRepository.save(ent);  	
 	}
 
 	@Override
@@ -62,6 +62,19 @@ public class EnteranceServiceImpl implements EnteranceService{
 	public void leaveRoom(Long roomId) throws Exception {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void deletemember(Long memberId, Long roomId) {
+		try {
+			entRepository.deleteByMemberIdAndRoomId(memberId, roomId);
+			Optional<Room> oroom = roomRepository.findById(roomId); 
+			Room room = oroom.get();
+				room.setRoomUserCnt(room.getRoomUserCnt()-1); 			
+			roomRepository.save(room); 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
  
 	
