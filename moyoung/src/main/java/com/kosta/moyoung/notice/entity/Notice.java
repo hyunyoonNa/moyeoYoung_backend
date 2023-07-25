@@ -37,6 +37,8 @@ public class Notice {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
+    
+    @Column(columnDefinition = "LONGTEXT")
     private String content;
     private String imageUrl;
     private Long memberId;
