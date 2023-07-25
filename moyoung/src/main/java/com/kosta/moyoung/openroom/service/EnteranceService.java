@@ -9,6 +9,6 @@ import com.kosta.moyoung.openroom.dto.RoomDTO;
 public interface EnteranceService{
 	public void JoinRoom(Long roomId, Member mem, boolean isHost)throws Exception;
 	public List<MemberResponseDto> findEnteranceList(Long roomId) throws Exception; 
+	public void deletemember (Long memberId, Long roomId);
 	public void leaveRoom(Long roomId) throws Exception;
-	
 }

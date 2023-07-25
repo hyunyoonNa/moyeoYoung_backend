@@ -41,7 +41,6 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 	private BookmarkRepository bookmarkRepository;
 	@Autowired
 	private FileService fileService; 
-	
 	@Autowired
 	private MemberService memberService;
 	
@@ -51,6 +50,7 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		//1.개설일 설정
 		Date today = new Date(System.currentTimeMillis()); 
 		roomDto.setRoomCreateDate(today);   
+		roomDto.setRoomUserCnt(1L);
 		// 파일입력
 		fileService.fileUpload(file); 
 		// save 
