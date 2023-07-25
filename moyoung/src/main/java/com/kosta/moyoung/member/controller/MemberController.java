@@ -1,12 +1,11 @@
 package com.kosta.moyoung.member.controller;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,12 +24,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kosta.moyoung.member.dto.MemberRequestDto;
 import com.kosta.moyoung.member.dto.MemberResponseDto;
 import com.kosta.moyoung.member.dto.PasswordRequestDto;
-import com.kosta.moyoung.member.entity.Member;
 import com.kosta.moyoung.member.repository.MemberRepository;
 import com.kosta.moyoung.member.service.MemberService;
-import com.kosta.moyoung.member.service.MemberServiceImpl;
-import com.kosta.moyoung.member.util.UserPrincipal;
 import com.kosta.moyoung.openroom.dto.RoomDTO;
+import com.kosta.moyoung.openroom.service.OpenRoomService;
 import com.kosta.moyoung.security.jwt.JwtUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -43,6 +39,9 @@ public class MemberController {
 
 	private final MemberService memberService;
 	private final MemberRepository memberRepository;
+	
+	@Autowired
+	private OpenRoomService openRoomService;
 
 	@GetMapping("/profile/{nickname}")
 	public ResponseEntity<MemberResponseDto> memberProfile(@PathVariable String nickname) {
@@ -129,7 +128,10 @@ public class MemberController {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			List<RoomDTO> list = memberService.roomListWithBookmark(JwtUtil.getCurrentMemberId());
+			List<Long> isBookmarks = openRoomService.isBookmarks(JwtUtil.getCurrentMemberId());  
 			map.put("list", list);
+			map.put("isBookmarks", isBookmarks);  
+			
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 
 		} catch (Exception e) {
@@ -144,7 +146,9 @@ public class MemberController {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			List<RoomDTO> list = memberService.madeRoomList(JwtUtil.getCurrentMemberId());
+			List<Long> isBookmarks = openRoomService.isBookmarks(JwtUtil.getCurrentMemberId());  
 			map.put("list", list);
+			map.put("isBookmarks", isBookmarks);  
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 
 		} catch (Exception e) {
@@ -159,7 +163,9 @@ public class MemberController {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			List<RoomDTO> list = memberService.joinRoomList(JwtUtil.getCurrentMemberId());
+			List<Long> isBookmarks = openRoomService.isBookmarks(JwtUtil.getCurrentMemberId());  
 			map.put("list", list);
+			map.put("isBookmarks", isBookmarks);  
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 
 		} catch (Exception e) {

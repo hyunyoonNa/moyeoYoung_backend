@@ -9,10 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -161,6 +163,19 @@ public class OpenRoomController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<Map<String,Object>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@DeleteMapping("/deleteRoom")
+	public ResponseEntity<String> deleteRoom(@RequestParam("roomId") Long roomId) {
+		try { 
+			System.out.println(roomId);
+			orService.removeRoom(roomId);
+			return new ResponseEntity<String>("방이 성공적으로 삭제되었습니다!",HttpStatus.OK); 
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
 	}
 	

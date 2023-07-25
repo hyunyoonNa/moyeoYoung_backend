@@ -15,7 +15,7 @@ public interface OpenRoomService {
 	List<RoomDTO> fineRoomByWord(String word,Integer page, PageInfo pageInfo) throws Exception;
 	RoomDTO selectById(Long id) throws Exception;
 	Boolean bookMark(Long roomId, Long memberId)throws Exception;
-	List<Long> isBookmarks(Long memberId) throws Exception; 
-
+	List<Long> isBookmarks(Long memberId) throws Exception;  
+	void removeRoom(Long roomId) throws Exception; 
 }	
 

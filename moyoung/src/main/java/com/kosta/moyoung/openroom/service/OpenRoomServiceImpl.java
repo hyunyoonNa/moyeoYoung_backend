@@ -41,7 +41,6 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 	private BookmarkRepository bookmarkRepository;
 	@Autowired
 	private FileService fileService; 
-	
 	@Autowired
 	private MemberService memberService;
 	
@@ -52,7 +51,8 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		Date today = new Date(System.currentTimeMillis()); 
 		roomDto.setRoomCreateDate(today);   
 		roomDto.setRoomUserCnt(1L);
-		// 파일입력
+
+    // 파일입력
 		fileService.fileUpload(file); 
 		// save 
 		Room room = new Room(roomDto, mem);
@@ -183,6 +183,11 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 			}
 		}
 		return list;
+	}
+
+	@Override
+	public void removeRoom(Long roomId) throws Exception { 
+		orRepository.deleteById(roomId); 
 	}
 
 	
