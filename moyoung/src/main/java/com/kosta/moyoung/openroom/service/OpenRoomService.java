@@ -16,6 +16,5 @@ public interface OpenRoomService {
 	RoomDTO selectById(Long id) throws Exception;
 	Boolean bookMark(Long roomId, Long memberId)throws Exception;
 	List<Long> isBookmarks(Long memberId) throws Exception; 
-
 }	
 
