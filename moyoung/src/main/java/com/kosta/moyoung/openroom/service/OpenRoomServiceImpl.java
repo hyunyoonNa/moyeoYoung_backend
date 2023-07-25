@@ -185,6 +185,11 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		return list;
 	}
 
+	@Override
+	public void removeRoom(Long roomId) throws Exception { 
+		orRepository.deleteById(roomId); 
+	}
+
 	
 	
 	 
