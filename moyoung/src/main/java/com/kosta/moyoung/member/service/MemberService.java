@@ -1,6 +1,7 @@
 package com.kosta.moyoung.member.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,6 +40,6 @@ public interface MemberService {
 	List<RoomDTO> madeRoomList(Long memberId) throws Exception;
 	
 	//가입한 방 목록
-	List<RoomDTO> joinRoomList(Long memberId) throws Exception;
+	Map<String,List<RoomDTO>> joinRoomList(Long memberId) throws Exception;
 	
 }

@@ -20,11 +20,13 @@ public class EnteranceDTO {
 	private Date entRegDate;
 	private Long roomId;
 	private Long memberId;
+	private boolean status;
 	 
 	public EnteranceDTO(Enterance ent) {
 		this.enteranceId = ent.getEnteranceId();
 		this.entRegDate = ent.getEntRegDate();
 		this.roomId = ent.getRoom().getRoomId();
 		this.memberId = ent.getMember().getMemberId();
+		this.status = ent.isStatus();
 	}
 }

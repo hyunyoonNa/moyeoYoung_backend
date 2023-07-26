@@ -6,14 +6,15 @@ import com.kosta.moyoung.member.entity.Member;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class MemberResponseDto {
 	
 	private Long memberId;
