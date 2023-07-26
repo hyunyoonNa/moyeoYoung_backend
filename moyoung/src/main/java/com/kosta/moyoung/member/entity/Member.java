@@ -86,6 +86,9 @@ public class Member  {
 //	private List<Note> recevedNotes = new ArrayList<>();  
 	@OneToMany(mappedBy="memberBookmark", fetch=FetchType.LAZY)
 	private List<Bookmark> bookmarks = new ArrayList<>();
+	
+	@OneToMany(mappedBy="member", fetch=FetchType.LAZY)
+	private List<RoomfeedEntity> feeds = new ArrayList<RoomfeedEntity>();
 
 	@OneToMany(mappedBy="member", fetch=FetchType.LAZY)
 	private List<Enterance> joindRooms = new ArrayList<>();
