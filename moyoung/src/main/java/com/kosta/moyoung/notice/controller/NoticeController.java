@@ -18,7 +18,6 @@ import com.kosta.moyoung.notice.entity.Notice;
 import com.kosta.moyoung.notice.repository.NoticeRepository;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000") // React 앱의 URL
 public class NoticeController {
     private final NoticeRepository repository;
 

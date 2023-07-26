@@ -48,7 +48,20 @@ public class RoomfeedServiceImpl implements RoomfeedService {
    @Autowired
    private LikeRepository likeRepo;
    
-   private String dir = "C:/resources/upload/";
+   private String dir;
+   
+   public RoomfeedServiceImpl() {
+       String OS = System.getProperty("os.name").toLowerCase();
+       if (OS.contains("win")) {
+           this.dir = "C:/resources/upload/";
+       } else if (OS.contains("mac")) {
+           System.out.println(System.getProperty("user.home"));
+           this.dir = "/Users/jeongsehun/Desktop/KOSTA/PROJECT3_FINAL/imgUpload/";
+       } else {
+           // Linux or other OS. You can add more else if blocks for other specific OS's
+           this.dir = "/path/to/your/directory";
+       }
+   }
 
    @Override
    public void WriteFeed(RoomFeedDTO roomfeedDto, MultipartFile[] files) throws Exception {

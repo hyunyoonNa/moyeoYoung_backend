@@ -57,7 +57,6 @@ public class RoomfeedEntity{
    @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL)
    private List<CommentEntity> comments = new ArrayList<>();
 
-   
    @Builder
    public static RoomfeedEntity createRoomfeedEntity(Member member, Room room, String content, String title, String filename) {
        RoomfeedEntity roomfeedEntity = new RoomfeedEntity();
