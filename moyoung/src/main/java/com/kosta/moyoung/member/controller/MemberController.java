@@ -78,23 +78,34 @@ public class MemberController {
 
 	@PostMapping("/update/{memberId}")
 	public ResponseEntity<String> updateMemberProfile(@PathVariable Long memberId,
-			@ModelAttribute MemberRequestDto memberRequestDto,
-			@RequestPart(value = "file", required = false) MultipartFile file) {
-		try {
-			if (file != null && !file.isEmpty()) {
-				String dir = "C:/resources/upload/";
-				String imgName = file.getOriginalFilename();
-				System.out.println(imgName);
-				File dfile = new File(dir + imgName);
-				file.transferTo(dfile);
-			}
-			memberService.updateMember(memberId, memberRequestDto, file);
-			return new ResponseEntity<String>("수정완료", HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
-		}
+	        @ModelAttribute MemberRequestDto memberRequestDto,
+	        @RequestPart(value = "file", required = false) MultipartFile file) {
+	    try {
+	        String OS = System.getProperty("os.name").toLowerCase();
+	        String dir;
+	        if (OS.contains("win")) {
+	            dir = "C:/resources/upload/";
+	        } else if (OS.contains("mac")) {
+	            dir = "/Users/jeongsehun/Desktop/KOSTA/PROJECT3_FINAL/imgUpload/";
+	        } else {
+	            // Linux or other OS. You can add more else if blocks for other specific OS's
+	            dir = "/path/to/your/directory";
+	        }
+
+	        if (file != null && !file.isEmpty()) {
+	            String imgName = file.getOriginalFilename();
+	            System.out.println(imgName);
+	            File dfile = new File(dir + imgName);
+	            file.transferTo(dfile);
+	        }
+	        memberService.updateMember(memberId, memberRequestDto, file);
+	        return new ResponseEntity<String>("수정완료", HttpStatus.OK);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+	    }
 	}
+
 
 	// 비밀번호변경
 	@PostMapping("/passwdUpdate")
