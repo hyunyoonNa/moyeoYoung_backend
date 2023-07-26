@@ -173,7 +173,7 @@ public class MemberController {
 	public ResponseEntity<Map<String, Object>> joinRoomList() {
 		Map<String, Object> map = new HashMap<>();
 		try {
-			List<RoomDTO> list = memberService.joinRoomList(JwtUtil.getCurrentMemberId());
+			Map<String,List<RoomDTO>> list = memberService.joinRoomList(JwtUtil.getCurrentMemberId());
 			List<Long> isBookmarks = openRoomService.isBookmarks(JwtUtil.getCurrentMemberId());  
 			map.put("list", list);
 			map.put("isBookmarks", isBookmarks);  
