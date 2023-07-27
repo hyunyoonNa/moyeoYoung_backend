@@ -35,7 +35,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler{
 		SecurityContextHolder.getContext().setAuthentication(authentication); //사용자정보 Security Context에 저장
 		response.setStatus(HttpServletResponse.SC_OK);
 		String memberId = authentication.getName();
-		log.info(memberId);
 		TokenDto accessToken = tokenProvider.generateTokenDto(authentication);
 		response.setHeader("Access-Control-Allow-Origin", apiUrl);
 		response.setStatus(HttpServletResponse.SC_OK);

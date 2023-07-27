@@ -133,6 +133,7 @@ public class MemberController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 탈퇴 중 오류가 발생하였습니다.");
 		}
 	}
+
 	// 북마크한 방 리스트
 	@GetMapping("/roomListWithBookmark")
 	public ResponseEntity<Map<String, Object>> roomListWithBookmark() {

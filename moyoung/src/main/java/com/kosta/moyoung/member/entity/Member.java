@@ -128,6 +128,7 @@ public class Member  {
 	 public void updateProfileContent(String profileContent){
 	        this.profileContent = profileContent;
 	    }
+
 	 
 	 
 	

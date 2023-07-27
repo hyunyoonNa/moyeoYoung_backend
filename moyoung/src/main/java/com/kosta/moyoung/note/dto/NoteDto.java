@@ -1,7 +1,5 @@
 package com.kosta.moyoung.note.dto;
 
-import java.time.LocalDateTime;
-
 import com.kosta.moyoung.note.entity.Note;
 
 import lombok.AllArgsConstructor;

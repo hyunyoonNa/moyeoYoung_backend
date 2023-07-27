@@ -38,7 +38,7 @@ public class JwtTokenProvider {
 //    @Value("jwt.secret")
 //    private String secretKey;
     private final Key key;
-    private static final long ACCESS_TOKEN_EXPIRE_TIME =  60 * 30 * 1000L;  // 토큰 유효시간 : 30분
+    private static final long ACCESS_TOKEN_EXPIRE_TIME =  60 * 60 * 1000L;  // 토큰 유효시간 : 30분
 	private static final long REFRESH_TOKEN_EXPIRE_TIME = 60 * 60 * 24 *1000L ;
 	
 	private static final String AUTHORITIES_KEY = "auth";	
@@ -71,7 +71,6 @@ public class JwtTokenProvider {
 	// 토큰 생성
 	public TokenDto generateTokenDto(Authentication authentication) {
         // 권한들 가져오기
-		log.info("[권한들 가져오기]" , authentication);
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -146,7 +145,6 @@ public class JwtTokenProvider {
 	
 	
 	public String resolveToken(HttpServletRequest request) {
-		 log.info("[resolveToken] 토큰 정보 헤더에서 읽어오기 ");
 		return request.getHeader("Authorization");
 	}
 	

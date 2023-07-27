@@ -17,6 +17,9 @@ import com.kosta.moyoung.member.repository.MemberRepository;
 import com.kosta.moyoung.note.dto.NoteDto;
 import com.kosta.moyoung.note.entity.Note;
 import com.kosta.moyoung.note.repository.NoteRepository;
+import com.kosta.moyoung.notification.entity.NotificationType;
+import com.kosta.moyoung.notification.repository.NotificationRepository;
+import com.kosta.moyoung.notification.service.NotificationService;
 import com.kosta.moyoung.security.jwt.JwtUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -27,7 +30,7 @@ public class NoteServiceImpl implements NoteService {
 	
 	private final NoteRepository noteRepository;
 	private final MemberRepository memberRepository;
-	private final ModelMapper modelmapper;
+	private final NotificationService notificationService;
 	
 	@Transactional
 	@Override
@@ -35,9 +38,7 @@ public class NoteServiceImpl implements NoteService {
 		// TODO Auto-generated method stub
 		System.out.println(noteDto.toString());
 		Optional<Member> receiver  = memberRepository.findByNickname(noteDto.getReceiverNickname());
-		System.out.println("받는사람 : " + receiver.get().getNickname());
 		Optional<Member> sender = memberRepository.findByNickname(noteDto.getSenderNickname());
-		System.out.println("보낸사람 : " + sender.get().getNickname());
 		if (!receiver.isPresent() || !sender.isPresent()) {
 		    throw new Exception("Receiver or sender not found");
 		}
@@ -53,7 +54,11 @@ public class NoteServiceImpl implements NoteService {
 				.deletedBySender(false)
 				.build();
 			noteRepository.save(note);
+			
+			 // 알림 생성
+	    notificationService.createNotification(sender.get(), receiver.get(), NotificationType.NEW_MESSAGE_ON_NOTE, "새로운 쪽지가 도착했습니다.", note.getNoteId());
 	}
+	
 	
 	@Transactional
 	@Override

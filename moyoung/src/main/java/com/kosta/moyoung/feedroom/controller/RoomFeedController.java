@@ -24,6 +24,8 @@ import com.kosta.moyoung.feedroom.entity.LikeEntity;
 import com.kosta.moyoung.feedroom.service.CommentService;
 import com.kosta.moyoung.feedroom.service.RoomfeedService;
 import com.kosta.moyoung.member.service.MemberService;
+import com.kosta.moyoung.notification.entity.NotificationType;
+import com.kosta.moyoung.notification.service.NotificationService;
 import com.kosta.moyoung.security.jwt.JwtUtil;
 
 @RestController
@@ -38,6 +40,9 @@ public class RoomFeedController {
    
    @Autowired
    private CommentService commentService;
+   
+   
+  
    
    //피드 작성
    @PostMapping("/writefeed/{roomId}")
@@ -103,6 +108,7 @@ public class RoomFeedController {
 		   Long memberId = JwtUtil.getCurrentMemberId();
 		   System.out.println(memberId);
 		   roomfeedservice.increaseLike(feedId, memberId);
+		
 		   return new ResponseEntity<String>("좋아요", HttpStatus.OK);
 	} catch (Exception e) {
 		e.printStackTrace();

@@ -31,6 +31,7 @@ public class CorsConfig {
         source.registerCorsConfiguration("/feed/**", config);
         source.registerCorsConfiguration("/ws/**", config);
         source.registerCorsConfiguration("/todos/**", config);
+        source.registerCorsConfiguration("/notification/**", config);
         return new CorsFilter(source);
     }
 }

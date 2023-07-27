@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import com.kosta.moyoung.member.dto.MemberResponseDto;
 import com.kosta.moyoung.member.entity.Member;
 import com.kosta.moyoung.member.service.MemberService;
+import com.kosta.moyoung.notification.entity.NotificationType;
+import com.kosta.moyoung.notification.service.NotificationService;
+import com.kosta.moyoung.openroom.dto.RoomDTO;
 import com.kosta.moyoung.openroom.entity.Enterance;
 import com.kosta.moyoung.openroom.entity.Room;
 import com.kosta.moyoung.openroom.repository.EnteranceRepository;
@@ -27,6 +30,10 @@ public class EnteranceServiceImpl implements EnteranceService {
 	@Autowired
 	private EnteranceRepository entRepository;
 	@Autowired
+	private OpenRoomRepository roomRepository;  
+	
+	@Autowired
+	private NotificationService notificationService;
 	private OpenRoomRepository roomRepository;
 
 	@Override
@@ -39,6 +46,8 @@ public class EnteranceServiceImpl implements EnteranceService {
 		if (!isHost && room.getRoomType().equals("open")) {
 			room.setRoomUserCnt(room.getRoomUserCnt() + 1);
 		}
+		
+	  
 		roomRepository.save(room);
 
 		Date today = new Date(System.currentTimeMillis());
@@ -50,7 +59,7 @@ public class EnteranceServiceImpl implements EnteranceService {
 		System.out.println(isWaiting);
 		Enterance ent = new Enterance(today, oroom.get(), mem, isWaiting);
 		entRepository.save(ent);
-
+    notificationService.createNotification( mem, room.getHost(), NotificationType.NEW_ROOM_JOIN, mem.getNickname()+"님이 방에 가입을 신청했습니다.", room.getRoomId());
 		return str;
 	}
 

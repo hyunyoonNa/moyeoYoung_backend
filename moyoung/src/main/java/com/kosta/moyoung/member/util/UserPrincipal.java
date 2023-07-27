@@ -19,7 +19,7 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class UserPrincipal implements OAuth2User, UserDetails { 
+public class UserPrincipal implements  UserDetails { 
 	private Member member;
 	 
 	private Long id;
@@ -53,11 +53,11 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 		this.attributes = attributes;
 	}
 
-	@Override
-	public Map<String, Object> getAttributes() {
-		// TODO Auto-generated method stub
-		return attributes;
-	}
+//	@Override
+//	public Map<String, Object> getAttributes() {
+//		// TODO Auto-generated method stub
+//		return attributes;
+//	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -65,11 +65,11 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 		return authorities;
 	}
 
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return String.valueOf(member.getMemberId());
-	}
+//	@Override
+//	public String getName() {
+//		// TODO Auto-generated method stub
+//		return String.valueOf(member.getMemberId());
+//	}
 
 	@Override
 	public String getPassword() {
