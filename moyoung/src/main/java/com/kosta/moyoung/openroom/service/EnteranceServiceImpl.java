@@ -86,14 +86,17 @@ public class EnteranceServiceImpl implements EnteranceService {
 	@Override
 	public void approveMember(Long memberId, Long roomId) throws Exception {  
 		List<Enterance> oent = entRepository.findByMemberMemberIdAndRoomRoomId(memberId, roomId);
-		System.out.println(roomId+":"+memberId);
-		System.out.println(oent.size());
 		if(oent.isEmpty()) {
 			throw new Exception("다시 시도하세요.");
 		}
 			Enterance ent = oent.get(0);
 			ent.setStatus(false);
 			entRepository.save(ent);
+			
+			//방 멤버수 +1
+			Optional<Room> room = roomRepository.findById(roomId);
+			room.get().setRoomUserCnt(room.get().getRoomUserCnt()+1);
+			roomRepository.save(room.get());
 		
 	}
 
