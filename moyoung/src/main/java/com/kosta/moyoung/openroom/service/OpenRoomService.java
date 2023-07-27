@@ -17,5 +17,6 @@ public interface OpenRoomService {
 	Boolean bookMark(Long roomId, Long memberId)throws Exception;
 	List<Long> isBookmarks(Long memberId) throws Exception;  
 	void removeRoom(Long roomId) throws Exception; 
+	Long modifyRoom(RoomDTO roomDto,MultipartFile file) throws Exception;
 }	
 
