@@ -59,6 +59,18 @@ public class OpenRoomController {
 		}
 	}
 	
+	@PostMapping("/settingRoom") 
+	public ResponseEntity<Long> settingRoom(@ModelAttribute RoomDTO roomDto, 
+			@RequestParam(value = "file", required=false) MultipartFile file){ 
+		try {  
+			Long roomId = orService.modifyRoom(roomDto,file);  
+			return new ResponseEntity<Long>(roomId ,HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Long>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	
 	
 	@GetMapping("/getroomMain/{roomId}")
