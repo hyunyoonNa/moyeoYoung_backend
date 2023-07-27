@@ -63,13 +63,13 @@ public class SecurityConfig {
             .antMatchers("/note/**").permitAll() 
             .antMatchers("/auth/**").permitAll()
             .antMatchers("/member/**").permitAll()
-            .antMatchers("/login/oauth2/*").permitAll()
+            .antMatchers("/notification/**").permitAll()
             .anyRequest()
             .authenticated()   // 나머지 API 는 전부 인증 필요
             
-            .and() 	
-            .oauth2Login()
-            .defaultSuccessUrl("/")
+//            .and() 	
+//            .oauth2Login()
+//            .defaultSuccessUrl("/")
             
             .and()
             .addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)

@@ -17,6 +17,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>{
 	//닉네임으로 프로필 조회
 	Optional<Member> findByNickname(String nickname);
 	
+	
 	boolean existsByEmail(String email);
 	boolean existsByNickname(String nickname);
 	

@@ -1,11 +1,9 @@
 package com.kosta.moyoung.member.controller;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,11 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kosta.moyoung.member.dto.MemberRequestDto;
 import com.kosta.moyoung.member.dto.MemberResponseDto;
 import com.kosta.moyoung.member.dto.PasswordRequestDto;
-import com.kosta.moyoung.member.entity.Member;
 import com.kosta.moyoung.member.repository.MemberRepository;
 import com.kosta.moyoung.member.service.MemberService;
-import com.kosta.moyoung.member.service.MemberServiceImpl;
-import com.kosta.moyoung.member.util.UserPrincipal;
 import com.kosta.moyoung.openroom.dto.RoomDTO;
 import com.kosta.moyoung.security.jwt.JwtUtil;
 
@@ -121,7 +115,9 @@ public class MemberController {
 			return ResponseEntity.ok("회원 탈퇴가 성공적으로 처리되었습니다.");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 탈퇴 중 오류가 발생하였습니다.");
-      
+		}
+	}
+		
 	// 북마크한 방 리스트
 	@GetMapping("/roomListWithBookmark")
 	public ResponseEntity<Map<String, Object>> roomListWithBookmark() {

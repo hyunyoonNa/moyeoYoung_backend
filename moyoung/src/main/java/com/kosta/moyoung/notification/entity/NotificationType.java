@@ -7,10 +7,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum NotificationType {
 	
-	NEW_MESSAGE_ON_NOTE("new message"),
-    NEW_COMMENT_ON_POST("new comment"),
-    NEW_LIKE_ON_POST("new like"),
-    NEW_ROOM_JOIN("new room");
+	NEW_MESSAGE_ON_NOTE("new message!"),
+    NEW_COMMENT_ON_POST("new comment!"),
+    NEW_LIKE_ON_POST("new like!"),
+    NEW_ROOM_JOIN("new room!");
 	
-	private final String value;
+	private final String alarmText;
 }

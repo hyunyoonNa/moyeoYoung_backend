@@ -16,6 +16,10 @@ import com.kosta.moyoung.feedroom.entity.CommentEntity;
 import com.kosta.moyoung.feedroom.entity.RoomfeedEntity;
 import com.kosta.moyoung.feedroom.repository.CommentRepository;
 import com.kosta.moyoung.feedroom.repository.RoomfeedRepository;
+import com.kosta.moyoung.member.entity.Member;
+import com.kosta.moyoung.member.service.MemberService;
+import com.kosta.moyoung.notification.entity.NotificationType;
+import com.kosta.moyoung.notification.service.NotificationService;
 import com.kosta.moyoung.security.jwt.JwtUtil;
 
 @Service
@@ -30,6 +34,12 @@ public class CommentServiceImpl implements CommentService {
 	@Autowired
 	RoomfeedRepository roomfeedRe;
 	
+	@Autowired
+	private MemberService memberService;
+	
+	@Autowired
+   private NotificationService notificationService; 
+	
 	@Override
 	public void WriteComment(CommentDTO commentDto, Long feedId) {
 		Long memberId = JwtUtil.getCurrentMemberId();
@@ -39,6 +49,18 @@ public class CommentServiceImpl implements CommentService {
 		commentDto.setFeedId(feedId);
 		CommentEntity comment = modelMapper.map(commentDto, CommentEntity.class);
 		commentrepository.save(comment);
+		try {
+			Member sender= memberService.findMember(memberId);
+			Member receiver = roomfeedRe.findById(feedId).get().getMember();
+			if(sender.getMemberId() != memberId) {
+			notificationService.createNotification(sender, receiver, NotificationType.NEW_COMMENT_ON_POST,  sender.getNickname()+"님이 댓글을 달았습니다.", comment.getCommentId() );
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		}
+		
+		
 	}
 
 	@Override

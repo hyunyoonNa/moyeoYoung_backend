@@ -27,6 +27,9 @@ import com.kosta.moyoung.feedroom.repository.LikeRepository;
 import com.kosta.moyoung.feedroom.repository.RoomfeedRepository;
 import com.kosta.moyoung.member.entity.Member;
 import com.kosta.moyoung.member.repository.MemberRepository;
+import com.kosta.moyoung.member.service.MemberService;
+import com.kosta.moyoung.notification.entity.NotificationType;
+import com.kosta.moyoung.notification.service.NotificationService;
 import com.kosta.moyoung.openroom.entity.Room;
 import com.kosta.moyoung.openroom.repository.OpenRoomRepository;
 import com.kosta.moyoung.security.jwt.JwtUtil;
@@ -43,10 +46,16 @@ public class RoomfeedServiceImpl implements RoomfeedService {
    private MemberRepository memberRepository; 
    
    @Autowired
+   private MemberService memberService;
+   
+   @Autowired
    private OpenRoomRepository oprepository;
    
    @Autowired
    private LikeRepository likeRepo;
+   
+   @Autowired
+   private NotificationService notificationService; 
    
    private String dir = "C:/resources/upload/";
 
@@ -135,7 +144,12 @@ public class RoomfeedServiceImpl implements RoomfeedService {
 		like.setFeedId(feedId);
 		like.setMemberId(memberId);
 		LikeEntity likes = modelMapper.map(like, LikeEntity.class);
-		likeRepo.save(likes);	
+		likeRepo.save(likes);
+		Member receiver = rfrepository.findById(feedId).get().getMember();
+		Member sender= memberService.findMember(memberId);
+		if(receiver.getMemberId() != memberId) {
+			notificationService.createNotification(sender, receiver, NotificationType.NEW_LIKE_ON_POST, sender.getNickname()+"님이 좋아요를 등록했습니다.", feedId);
+		}
 	}
 	
 	@Override
@@ -162,9 +176,9 @@ public class RoomfeedServiceImpl implements RoomfeedService {
 	public List<RoomFeedDTO> selectFeeds(Long memberId) throws Exception {
 		Optional<Member> member = memberRepository.findById(memberId);
 		List<RoomFeedDTO> feeds = new ArrayList<>();
-		int roomsize = member.get().getRooms().size();
+		int roomsize = member.get().getJoindRooms().size();
 		for(int i = 0; i<=roomsize-1; i++) {
-			List<RoomfeedEntity> Rfeeds = member.get().getRooms().get(i).getRoomfeeds();
+			List<RoomfeedEntity> Rfeeds = member.get().getJoindRooms().get(i).getRoom().getRoomfeeds();
 			for (RoomfeedEntity roomFeedEntity : Rfeeds) {
 			        RoomFeedDTO roomFeedDTO = new RoomFeedDTO();
 			        roomFeedDTO.setTitle(roomFeedEntity.getTitle());

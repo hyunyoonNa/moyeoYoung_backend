@@ -1,6 +1,7 @@
 package com.kosta.moyoung.notification.entity;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,84 +13,73 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-import org.springframework.data.annotation.CreatedDate;
 
 import com.kosta.moyoung.member.entity.Member;
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@TypeDef(name="jsonb",typeClass = JsonBinaryType.class)
-public class Notification extends EntityDate{
-	
+@Builder
+public class Notification {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "alarmId")
-	private Long alarmId;
-	
-//	@Embedded
-//	private NotificationContent content;
-	
+	@Column(name = "notification_id")
+	private Long notificationId;
+
 	@Column
 	private String message;
+
+	@Enumerated(EnumType.STRING)
+	private NotificationType type;
+
+	
+	//알람을 받은사람
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "receiver_id")
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private Member receiverId;
 	
 	@Column
-	private String link;
+	private String registeredAt;
 	
-	@Enumerated(EnumType.STRING)
-    private NotificationType type;
-    
-    @Column(nullable = false)
-    private Boolean isRead;
-    
-    @Column(nullable = false)
-    private Boolean isDeleted;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id")
-    private Member sender;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "recevier_id")
-    @OnDelete(action=OnDeleteAction.CASCADE)
-    private Member recevier;
-    
-    @Type(type="jsonb")
-    @Column(columnDefinition = "json")
-    private NotificationArgs nargs;
-    
-    @CreatedDate
-    private LocalDateTime createdAt;
-    
-    @Builder
-    public Notification(Member sender, Member recevier, String message, String link, Boolean isRead, NotificationType type ) {
-    	this.sender = sender;
-    	this.recevier = recevier;
-//    	this.content = new NotificationContent(content);
-    	this.message = message;
-    	this.link = link;
-    	this.isRead = isRead;	
-    	this.type = type;
+	
+	//알람을 발생시킨사람
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "sender_id")
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private Member senderId;
+	
+	
+	@Column
+	private Long  targetId;
+	
+	@Column
+    private boolean isRead; // 읽음 상태 여부 
+	
+	
+	@PrePersist
+	protected  void registeredAt() {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd:HH:mm");
+		registeredAt = LocalDateTime.now().format(formatter);
+		isRead = false; // 새로운 알림이 생성되면 읽음 상태를 false로 초기화
+	}
+	
+	public void read() {
+        this.isRead = true;
     }
-    
-//    public String getContent() {
-//        return content.getContent();
-//    }
-
-//    public String getUrl() {
-//        return url.getUrl();
-//    }
 	
+
 }

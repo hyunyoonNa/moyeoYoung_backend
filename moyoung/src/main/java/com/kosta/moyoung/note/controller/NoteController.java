@@ -22,6 +22,8 @@ import com.kosta.moyoung.member.repository.MemberRepository;
 import com.kosta.moyoung.member.service.MemberService;
 import com.kosta.moyoung.note.dto.NoteDto;
 import com.kosta.moyoung.note.service.NoteService;
+import com.kosta.moyoung.notification.repository.NotificationRepository;
+import com.kosta.moyoung.notification.service.NotificationService;
 import com.kosta.moyoung.security.jwt.JwtUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -31,9 +33,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("note")
 public class NoteController {
 	private final MemberRepository memberRepository;
-	private final MemberService memberService;
 	private final NoteService noteService;
-
+	
 	@PostMapping("/send")
 	public ResponseEntity<String> sendNote(@ModelAttribute NoteDto noteDto) {
 		System.out.println("noteDto : " + noteDto.getContent());
@@ -42,6 +43,8 @@ public class NoteController {
 			if (member.isPresent()) {
 				noteDto.setSenderNickname(member.get().getNickname());
 				noteService.write(noteDto);
+				//알림 전송
+				
 				return new ResponseEntity<String>("쪽지 보내기 성공", HttpStatus.OK);
 			} else {
 				return new ResponseEntity<String>("멤버를 찾을 수 없습니다.", HttpStatus.BAD_REQUEST);
