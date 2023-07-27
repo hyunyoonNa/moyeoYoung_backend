@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,6 +27,7 @@ import com.kosta.moyoung.member.dto.PasswordRequestDto;
 import com.kosta.moyoung.member.repository.MemberRepository;
 import com.kosta.moyoung.member.service.MemberService;
 import com.kosta.moyoung.openroom.dto.RoomDTO;
+import com.kosta.moyoung.openroom.service.OpenRoomService;
 import com.kosta.moyoung.security.jwt.JwtUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -37,6 +39,9 @@ public class MemberController {
 
 	private final MemberService memberService;
 	private final MemberRepository memberRepository;
+	
+	@Autowired
+	private OpenRoomService openRoomService;
 
 	@GetMapping("/profile/{nickname}")
 	public ResponseEntity<MemberResponseDto> memberProfile(@PathVariable String nickname) {
@@ -73,23 +78,34 @@ public class MemberController {
 
 	@PostMapping("/update/{memberId}")
 	public ResponseEntity<String> updateMemberProfile(@PathVariable Long memberId,
-			@ModelAttribute MemberRequestDto memberRequestDto,
-			@RequestPart(value = "file", required = false) MultipartFile file) {
-		try {
-			if (file != null && !file.isEmpty()) {
-				String dir = "C:/resources/upload/";
-				String imgName = file.getOriginalFilename();
-				System.out.println(imgName);
-				File dfile = new File(dir + imgName);
-				file.transferTo(dfile);
-			}
-			memberService.updateMember(memberId, memberRequestDto, file);
-			return new ResponseEntity<String>("수정완료", HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
-		}
+	        @ModelAttribute MemberRequestDto memberRequestDto,
+	        @RequestPart(value = "file", required = false) MultipartFile file) {
+	    try {
+	        String OS = System.getProperty("os.name").toLowerCase();
+	        String dir;
+	        if (OS.contains("win")) {
+	            dir = "C:/resources/upload/";
+	        } else if (OS.contains("mac")) {
+	            dir = "/Users/jeongsehun/Desktop/KOSTA/PROJECT3_FINAL/imgUpload/";
+	        } else {
+	            // Linux or other OS. You can add more else if blocks for other specific OS's
+	            dir = "/path/to/your/directory";
+	        }
+
+	        if (file != null && !file.isEmpty()) {
+	            String imgName = file.getOriginalFilename();
+	            System.out.println(imgName);
+	            File dfile = new File(dir + imgName);
+	            file.transferTo(dfile);
+	        }
+	        memberService.updateMember(memberId, memberRequestDto, file);
+	        return new ResponseEntity<String>("수정완료", HttpStatus.OK);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+	    }
 	}
+
 
 	// 비밀번호변경
 	@PostMapping("/passwdUpdate")
@@ -117,14 +133,17 @@ public class MemberController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 탈퇴 중 오류가 발생하였습니다.");
 		}
 	}
-		
+
 	// 북마크한 방 리스트
 	@GetMapping("/roomListWithBookmark")
 	public ResponseEntity<Map<String, Object>> roomListWithBookmark() {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			List<RoomDTO> list = memberService.roomListWithBookmark(JwtUtil.getCurrentMemberId());
+			List<Long> isBookmarks = openRoomService.isBookmarks(JwtUtil.getCurrentMemberId());  
 			map.put("list", list);
+			map.put("isBookmarks", isBookmarks);  
+			
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 
 		} catch (Exception e) {
@@ -139,7 +158,9 @@ public class MemberController {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			List<RoomDTO> list = memberService.madeRoomList(JwtUtil.getCurrentMemberId());
+			List<Long> isBookmarks = openRoomService.isBookmarks(JwtUtil.getCurrentMemberId());  
 			map.put("list", list);
+			map.put("isBookmarks", isBookmarks);  
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 
 		} catch (Exception e) {
@@ -153,8 +174,10 @@ public class MemberController {
 	public ResponseEntity<Map<String, Object>> joinRoomList() {
 		Map<String, Object> map = new HashMap<>();
 		try {
-			List<RoomDTO> list = memberService.joinRoomList(JwtUtil.getCurrentMemberId());
+			Map<String,List<RoomDTO>> list = memberService.joinRoomList(JwtUtil.getCurrentMemberId());
+			List<Long> isBookmarks = openRoomService.isBookmarks(JwtUtil.getCurrentMemberId());  
 			map.put("list", list);
+			map.put("isBookmarks", isBookmarks);  
 			return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 
 		} catch (Exception e) {

@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -46,17 +47,17 @@ public class Room {
 	@Column(nullable = false)
 	private Long roomUserCnt;  //멤버수
 	
-	@OneToMany(mappedBy="roomBookmark" , fetch=FetchType.LAZY)
-	private List<Bookmark> bookmarks = new ArrayList<>();
+	@OneToMany(mappedBy="roomBookmark" , fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Bookmark> bookmarks = new ArrayList<>(); 
 	
-	@OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<RoomfeedEntity> roomfeeds = new ArrayList<>();
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="memberId")  
 	private Member host; //방장아이디 
 	
-	@OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Enterance> members = new ArrayList<>();
 	
 	

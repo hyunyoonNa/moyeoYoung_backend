@@ -30,9 +30,7 @@ import com.kosta.moyoung.util.PageInfo;
 
 @Service
 public class OpenRoomServiceImpl implements OpenRoomService {
-	 
-	@Autowired
-	private ModelMapper modelMapper;
+	  
 	@Autowired
 	private MemberRepository memberRepository; 
 	@Autowired
@@ -40,10 +38,7 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 	@Autowired
 	private BookmarkRepository bookmarkRepository;
 	@Autowired
-	private FileService fileService; 
-	
-	@Autowired
-	private MemberService memberService;
+	private FileService fileService;  
 	
 
 	@Override
@@ -52,7 +47,6 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 		Date today = new Date(System.currentTimeMillis()); 
 		roomDto.setRoomCreateDate(today);  
 		roomDto.setRoomUserCnt(1L);
-		// 파일입력
 		fileService.fileUpload(file); 
 		// save 
 		Room room = new Room(roomDto, mem);
@@ -183,6 +177,31 @@ public class OpenRoomServiceImpl implements OpenRoomService {
 			}
 		}
 		return list;
+	}
+
+	@Override
+	public void removeRoom(Long roomId) throws Exception { 
+		orRepository.deleteById(roomId); 
+	}
+
+	@Override
+	public Long modifyRoom(RoomDTO roomDto, MultipartFile file) throws Exception { 
+		Date today = new Date(System.currentTimeMillis()); 
+		roomDto.setRoomCreateDate(today);     
+		fileService.fileUpload(file);  
+		
+		Optional<Room> oroom =orRepository.findById(roomDto.getRoomId());
+		if(oroom.isEmpty())throw new Exception("방이 존재하지 않습니다.");
+		Room room = oroom.get();
+		
+		//방설정변경
+		room.setRoomCategory(roomDto.getRoomCategory());
+		room.setRoomContent(roomDto.getRoomContent());
+		room.setRoomImage(roomDto.getRoomImage());
+		room.setRoomType(roomDto.getRoomType()); 
+		
+		orRepository.save(room);  
+		return room.getRoomId(); 
 	}
 
 	
