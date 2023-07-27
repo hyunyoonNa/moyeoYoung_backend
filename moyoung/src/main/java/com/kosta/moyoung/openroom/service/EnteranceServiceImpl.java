@@ -31,10 +31,8 @@ public class EnteranceServiceImpl implements EnteranceService {
 	private EnteranceRepository entRepository;
 	@Autowired
 	private OpenRoomRepository roomRepository;  
-	
 	@Autowired
 	private NotificationService notificationService;
-	private OpenRoomRepository roomRepository;
 
 	@Override
 	public String JoinRoom(Long roomId, Member mem, boolean isHost) throws Exception {
